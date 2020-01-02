@@ -8,6 +8,7 @@
 #' @export
 #' @examples
 #' standard_normal_plot()
+#' standard_normal_plot(size=5)
 standard_normal_plot<-function(size=11){
 require(ggplot2)
   z_stanine<-c(-4,-1.75,-1.75,-1.25,-1.25,-0.75,-0.75,-0.25,-0.25,0.25,0.25,0.75,0.75,1.25,1.25,1.75,1.75,4)
