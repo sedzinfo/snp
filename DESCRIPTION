@@ -1,13 +1,13 @@
 Package: snp
-Title: What the Package Does (One Line, Title Case)
+Title: Plot standard normal distribution
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Dimitrios",
+           family = "Zacharatos",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
+           email = "dimitrios@psycholate.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Description: Plot standard normal distribution.
 License: What license it uses
 Encoding: UTF-8
 LazyData: true
