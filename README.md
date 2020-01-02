@@ -6,6 +6,8 @@ A function that creates a standard normal plot in R with Z T sten stanine and pe
 
 install.packages("devtools")
 
+library(devtools)
+
 install_github("sedzinfo/snp")
 
 # USE
