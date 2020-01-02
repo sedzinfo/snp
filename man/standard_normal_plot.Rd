@@ -4,7 +4,10 @@
 \alias{standard_normal_plot}
 \title{Descriptive statistics}
 \usage{
-standard_normal_plot()
+standard_normal_plot(size = 11)
+}
+\arguments{
+\item{size}{text size}
 }
 \description{
 uses psych

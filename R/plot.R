@@ -3,11 +3,12 @@
 ##########################################################################################
 #' @title Descriptive statistics
 #' @description uses psych
+#' @param size text size
 #' @details returns xlsx
 #' @export
 #' @examples
 #' standard_normal_plot()
-standard_normal_plot<-function(){
+standard_normal_plot<-function(size=11){
 require(ggplot2)
   z_stanine<-c(-4,-1.75,-1.75,-1.25,-1.25,-0.75,-0.75,-0.25,-0.25,0.25,0.25,0.75,0.75,1.25,1.25,1.75,1.75,4)
   stanine<-c(1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9)
@@ -21,7 +22,6 @@ require(ggplot2)
   standard_normal_distribution<-function(x)
     return((1/sqrt(2*pi))*exp(-1/2*x^2))
   z_score<-snd<--4:4
-  size<-11
   snd<-data.frame(y=standard_normal_distribution(seq(-4,4,.1)),x=seq(-4,4,.1))
   normal_plot<-ggplot(snd,aes(x=x,y=y))+
     geom_line(size=2,alpha=.5)+
