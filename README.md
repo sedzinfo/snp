@@ -10,6 +10,8 @@ library(devtools)
 
 install_github("sedzinfo/snp")
 
-# USE
+# Usage
+
+library(snp)
 
 standard_normal_plot()
