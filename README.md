@@ -15,3 +15,5 @@ install_github("sedzinfo/snp")
 library(snp)
 
 standard_normal_plot()
+
+<img src="http://rpubs.com/sedzinfo/standard_normal">
