@@ -3,4 +3,5 @@ A function that creates a standard normal plot in R with Z T sten stanine and pe
 
 # Installation Instructions
 install.packages("devtools")
+
 install_github("sedzinfo/snp")
