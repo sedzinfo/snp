@@ -1,14 +1,12 @@
 Package: snp
 Title: Plot standard normal distribution
 Version: 0.0.0.9000
-Authors@R: 
-    person(given = "Dimitrios",
-           family = "Zacharatos",
-           role = c("aut", "cre"),
-           email = "dimitrios@psycholate.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+Authors@R: person("Dimitrios", "Zacharatos", email = "dimitrios@psycholate.com", role = c("aut", "cre"))
+Author: Dimitrios Zacharatos [aut, cre]
+Maintainer: Dimitrios Zacharatos <dimitrios@psycholate.com>
+Depends: ggplot2
 Description: Plot standard normal distribution.
-License: What license it uses
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.0.2
