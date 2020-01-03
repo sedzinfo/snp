@@ -1,6 +1,6 @@
 # Standard Normal Plot
 
-A function that creates a standard normal plot in R with Z T sten stanine and percent x axis
+A function that creates a standard normal plot in R with Z T sten stanine and percentile x axis
 
 # Installation Instructions
 
