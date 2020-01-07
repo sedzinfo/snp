@@ -1,7 +1,7 @@
 ##########################################################################################
-# DESCRIPTIVES
+# STANDARD NORMAL PLOT
 ##########################################################################################
-#' @title Descriptive statistics
+#' @title Plot standard normal plot
 #' @param size text size
 #' @export
 #' @examples
