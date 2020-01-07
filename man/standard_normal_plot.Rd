@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{standard_normal_plot}
 \alias{standard_normal_plot}
-\title{Descriptive statistics}
+\title{Plot standard normal plot}
 \usage{
 standard_normal_plot(size = 10)
 }
@@ -10,7 +10,7 @@ standard_normal_plot(size = 10)
 \item{size}{text size}
 }
 \description{
-Descriptive statistics
+Plot standard normal plot
 }
 \examples{
 standard_normal_plot()
