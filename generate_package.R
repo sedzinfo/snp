@@ -7,5 +7,5 @@
 library(devtools)
 library(roxygen2)
 usethis::create_package("snp")
-document()
+document("snp")
 install("snp")
