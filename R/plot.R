@@ -3,12 +3,13 @@
 ##########################################################################################
 #' @title Plot standard normal plot
 #' @param size text size
+#' @import ggplot2
+#' @importFrom grDevices rainbow
 #' @export
 #' @examples
 #' standard_normal_plot()
 #' standard_normal_plot(size=5)
 standard_normal_plot<-function(size=10){
-  require(ggplot2)
   standard_normal_distribution<-function(x)
     return((1/sqrt(2*pi))*exp(-1/2*x^2))
   percentile_x<-c(-2.326,-1.645,-1.282,-0.675,0,0.675,1.282,1.645,2.326)
@@ -20,7 +21,7 @@ standard_normal_plot<-function(size=10){
   colours<-rainbow(nrow(ss))
   z_score<--4:4
   snd<-data.frame(y=standard_normal_distribution(seq(-4,4,.01)),x=seq(-4,4,.01))
-  normal_plot<-ggplot(snd,aes(x=x,y=y))+
+  normal_plot<-ggplot(snd,aes(x=snd$x,y=snd$y))+
     geom_line(size=2,alpha=.3)+
     theme_bw(base_size=size)+
     labs(x="",y="")+
@@ -71,7 +72,6 @@ standard_normal_plot<-function(size=10){
 
     annotate("text",x=min(z_score)-1,y=-.20,label="STANINE",hjust=0,vjust=0,size=size)+
     annotate("text",x=c(-3,-1.75+.25,-1.25+.25,-0.75+.25,-0.25+.25,0.25-.25,0.75-.25,1.25-.25,1.75-.25,3),y=rep(-.20,10),label=c(1:5,5:9),vjust=0,size=size)+
-
 
     geom_hline(yintercept=-.002,alpha=.5,size=.1)+
     geom_hline(yintercept=-.055,alpha=.5,size=.1)+
