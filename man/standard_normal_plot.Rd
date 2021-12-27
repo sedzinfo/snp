@@ -4,7 +4,7 @@
 \alias{standard_normal_plot}
 \title{Plot standard normal plot}
 \usage{
-standard_normal_plot(size = 10)
+standard_normal_plot(size = 5)
 }
 \arguments{
 \item{size}{text size}
