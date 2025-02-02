@@ -16,4 +16,6 @@ library(snp)
 
 standard_normal_plot()
 
+# Screenshot
+
 <img src="https://raw.githubusercontent.com/sedzinfo/snp/master/snp.png">
