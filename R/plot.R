@@ -1,10 +1,35 @@
 ##########################################################################################
 # STANDARD NORMAL PLOT
 ##########################################################################################
-#' @title Plot standard normal plot
-#' @param size text size
+#' @title Plot the standard normal curve with score scales
+#' @description Draws the standard normal curve, marked at every standard deviation with the
+#' percentage of cases in each interval, and lines up under it the z, T, percentile, sten,
+#' stanine, grade and IQ scales, so that a score on one scale can be read off on the others.
+#' @details All scales are placed on the z axis:
+#' \itemize{
+#'   \item \strong{z}: standard score, mean 0 and standard deviation 1.
+#'   \item \strong{T}: \eqn{50 + 10z}.
+#'   \item \strong{Percentile}: the z values of the 1st, 5th, 10th, 25th, 50th, 75th, 90th,
+#'     95th and 99th percentiles.
+#'   \item \strong{Sten}: ten bands half a standard deviation wide, sten 1 below \eqn{z = -2}
+#'     and sten 10 above \eqn{z = 2} (mean 5.5, standard deviation 2).
+#'   \item \strong{Stanine}: nine bands half a standard deviation wide, stanine 5 from
+#'     \eqn{z = -0.25} to \eqn{z = 0.25} (mean 5, standard deviation 2).
+#'   \item \strong{Grade}: groups of stanines, E (1-2), D (3), C (4-6), B (7) and A (8-9).
+#'   \item \strong{IQ}: \eqn{100 + 15z}.
+#' }
+#' The coloured sten, stanine and grade bands are drawn as thick lines, whose thickness does
+#' not follow the size of the figure, so in figures of ordinary size they spill over the rows
+#' above them. \code{\link{standard_normal_scales}} draws the same chart so that it fits any
+#' figure size.
+#' @param size Text size of all labels, in millimetres (ggplot2 text size). The default of 5
+#'   suits large figures; use about 3 for figures around 7 inches wide.
+#' @return A ggplot object. Print it to draw the chart, or save it with
+#'   \code{ggplot2::ggsave()}. The chart keeps a fixed aspect ratio and is about 2.5 times as
+#'   wide as it is tall, so a figure with those proportions has no empty margins.
+#' @seealso \code{\link{standard_normal_scales}}
 #' @import ggplot2
-#' @importFrom grDevices rainbow
+#' @importFrom grDevices hcl.colors
 #' @export
 #' @examples
 #' standard_normal_plot()
