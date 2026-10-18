@@ -47,6 +47,7 @@ standard_normal_plot<-function(size=5) {
           plot.background=element_blank(),
           panel.border=element_blank())
   
+
   x<-snd$x
   
   # for (i in z_score) {
@@ -55,16 +56,16 @@ standard_normal_plot<-function(size=5) {
   # }
   
   normal_plot<-normal_plot+
-    geom_segment(aes(x=z_score[1],y=-0.01,xend=z_score[1],yend=snd[which(x==z_score[1]),"y"]),alpha=1,na.rm=TRUE,size=1,color=linecolor)+
-    geom_segment(aes(x=z_score[2],y=-0.01,xend=z_score[2],yend=snd[which(x==z_score[2]),"y"]),alpha=1,na.rm=TRUE,size=1,color=linecolor)+
-    geom_segment(aes(x=z_score[3],y=-0.01,xend=z_score[3],yend=snd[which(x==z_score[3]),"y"]),alpha=1,na.rm=TRUE,size=1,color=linecolor)+
-    geom_segment(aes(x=z_score[4],y=-0.01,xend=z_score[4],yend=snd[which(x==z_score[4]),"y"]),alpha=1,na.rm=TRUE,size=1,color=linecolor)+
-    geom_segment(aes(x=z_score[5],y=-0.01,xend=z_score[5],yend=snd[which(x==z_score[5]),"y"]),alpha=1,na.rm=TRUE,size=1,color=linecolor)+
-    geom_segment(aes(x=z_score[6],y=-0.01,xend=z_score[6],yend=snd[which(x==z_score[6]),"y"]),alpha=1,na.rm=TRUE,size=1,color=linecolor)+
-    geom_segment(aes(x=z_score[7],y=-0.01,xend=z_score[7],yend=snd[which(x==z_score[7]),"y"]),alpha=1,na.rm=TRUE,size=1,color=linecolor)+
-    geom_segment(aes(x=z_score[8],y=-0.01,xend=z_score[8],yend=snd[which(x==z_score[8]),"y"]),alpha=1,na.rm=TRUE,size=1,color=linecolor)+
-    geom_segment(aes(x=z_score[9],y=-0.01,xend=z_score[9],yend=snd[which(x==z_score[9]),"y"]),alpha=1,na.rm=TRUE,size=1,color=linecolor)+
-    
+    geom_segment(x = z_score[1],y = -0.01,xend = z_score[1],yend = snd[which(x == z_score[1]), "y"],linewidth = 1,color = linecolor,inherit.aes = FALSE)+
+    geom_segment(x = z_score[2],y = -0.01,xend = z_score[2],yend = snd[which(x == z_score[2]), "y"],linewidth = 1,color = linecolor,inherit.aes = FALSE)+
+    geom_segment(x = z_score[3],y = -0.01,xend = z_score[3],yend = snd[which(x == z_score[3]), "y"],linewidth = 1,color = linecolor,inherit.aes = FALSE)+
+    geom_segment(x = z_score[4],y = -0.01,xend = z_score[4],yend = snd[which(x == z_score[4]), "y"],linewidth = 1,color = linecolor,inherit.aes = FALSE)+
+    geom_segment(x = z_score[5],y = -0.01,xend = z_score[5],yend = snd[which(x == z_score[5]), "y"],linewidth = 1,color = linecolor,inherit.aes = FALSE)+
+    geom_segment(x = z_score[6],y = -0.01,xend = z_score[6],yend = snd[which(x == z_score[6]), "y"],linewidth = 1,color = linecolor,inherit.aes = FALSE)+
+    geom_segment(x = z_score[7],y = -0.01,xend = z_score[7],yend = snd[which(x == z_score[7]), "y"],linewidth = 1,color = linecolor,inherit.aes = FALSE)+
+    geom_segment(x = z_score[8],y = -0.01,xend = z_score[8],yend = snd[which(x == z_score[8]), "y"],linewidth = 1,color = linecolor,inherit.aes = FALSE)+
+    geom_segment(x = z_score[9],y = -0.01,xend = z_score[9],yend = snd[which(x == z_score[9]), "y"],linewidth = 1,color = linecolor,inherit.aes = FALSE)+
+
     geom_hline(yintercept=-0.01,alpha=1,size=1,color=linecolor)+
     annotate("text",x=c(-3:4)-.5,y=rep(0.01,8),label=c("0.13%","2.14%","13.59%","34.13%","34.13%","13.59%","2.14%","0.13%"),size=size)+
     
