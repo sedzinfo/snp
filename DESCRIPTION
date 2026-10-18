@@ -6,7 +6,9 @@ Authors@R: person("Dimitrios", "Zacharatos", , "dimitrios@psycholate.com", role 
 Author: Dimitrios Zacharatos [aut, cre]
 Maintainer: Dimitrios Zacharatos <dimitrios@psycholate.com>
 Depends: ggplot2
-Description: Plot standard normal distribution.
+Description: Draws the standard normal curve with score scales lined up under it: z, T,
+    percentile, sten, stanine, grade and IQ, or scales defined in a data frame, each shown
+    as labelled tick marks or coloured bands.
 License: GPL (>= 2) + file LICENSE
 Encoding: UTF-8
 LazyData: true
