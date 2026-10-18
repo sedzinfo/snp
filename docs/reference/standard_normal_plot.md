@@ -65,7 +65,7 @@ standard_normal_plot()
 #> Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
 #> ℹ Please use `linewidth` instead.
 #> ℹ The deprecated feature was likely used in the snp package.
-#>   Please report the issue to the authors.
+#>   Please report the issue at <https://github.com/sedzinfo/snp/issues>.
 
 standard_normal_plot(size=3)
 ```
