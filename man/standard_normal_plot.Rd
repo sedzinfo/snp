@@ -14,5 +14,5 @@ Plot standard normal plot
 }
 \examples{
 standard_normal_plot()
-standard_normal_plot(size=5)
+standard_normal_plot(size=3)
 }
