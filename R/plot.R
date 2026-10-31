@@ -56,7 +56,7 @@ standard_normal_plot<-function(size=5) {
   line_6<--.25
   line_7<--.29
   linecolor<-"gray50"
-  normal_plot<-ggplot(snd,aes(x=x,y=y))+
+  normal_plot<-ggplot(snd,aes(x=.data$x,y=.data$y))+
     geom_line(linewidth=2,alpha=1,color=linecolor)+
     theme_bw(base_size=size)+
     labs(x="",y="")+
