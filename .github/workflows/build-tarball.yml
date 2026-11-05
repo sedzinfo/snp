@@ -24,7 +24,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: r-lib/actions/setup-r@v2
 
@@ -36,7 +36,9 @@ jobs:
       - uses: r-lib/actions/setup-tinytex@v2
 
       - name: Install LaTeX packages for the R manual
-        run: tlmgr install inconsolata upquote makeindex
+        run: |
+          tlmgr update --self                     # tlmgr must match the TeX Live repository, or it refuses to install
+          tlmgr install inconsolata upquote makeindex
 
       - name: Build PDF manual
         run: R CMD Rd2pdf . --force --no-preview --output=snp.pdf
