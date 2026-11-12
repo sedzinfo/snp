@@ -23,7 +23,7 @@ standard_normal_plot()
 
 # Screenshot
 
-<img src="https://raw.githubusercontent.com/sedzinfo/snp/master/snp.png">
+<img src="https://raw.githubusercontent.com/sedzinfo/snp/master/snp.png" alt="The standard normal curve with the share of cases in each standard deviation band (34.13%, 13.59%, 2.14%, 0.13%), above aligned scales of z scores, T scores, percentiles, stens, stanines, grades and IQ">
 
 ---
 
