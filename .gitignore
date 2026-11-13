@@ -1,2 +1,7 @@
 .Rproj.user
 .Rhistory
+
+# the package tarball and the PDF manual: the Build package tarball workflow publishes them
+# on the "latest" release, so they are not committed
+/*.tar.gz
+/snp.pdf
