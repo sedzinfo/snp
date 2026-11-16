@@ -1,0 +1,267 @@
+---
+title: "Examples"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 3.2, dpi = 150,
+                      out.width = "100%")
+```
+
+`plot_normal()` draws the standard normal curve with score scales lined up under it, so that a
+score on one scale can be read off on the others. This article starts from the default chart and
+works up to charts with scales of your own.
+
+```{r setup}
+library(snp)
+```
+
+## The default chart
+
+```{r default}
+plot_normal()
+```
+
+The curve is divided at every standard deviation and marked with the percentage of cases in each
+interval. Under it are the z, T, cumulative percentage, percentile, sten, stanine, grade and IQ
+scales. Read straight down from any point: a score one standard deviation above the mean is z = 1,
+T = 60 and IQ = 115, 84.1% of cases fall below it, and it is in stanine 7 and grade B.
+
+## Palettes
+
+`palette` sets the colours. In `"blues"` (the default), `"reds"` and `"greens"`, colour shows how
+common a score is: the intervals under the curve that hold more cases are darker, and so are the
+bands nearer the mean.
+
+```{r reds}
+plot_normal(palette = "reds")
+```
+
+```{r greens}
+plot_normal(palette = "greens")
+```
+
+`"diverging"` leaves the area under the curve gray and colours the bands by where they sit against
+the mean: blue below it, red above it, darker the further from it, and gray for a band centred on
+it.
+
+```{r diverging}
+plot_normal(palette = "diverging")
+```
+
+## Dark mode
+
+`mode = "dark"` draws light text on a near-black background, for slides and dark pages. The
+colours that are darker in the light mode are brighter instead, so that they still stand out from
+the background.
+
+```{r dark}
+plot_normal(mode = "dark")
+```
+
+```{r dark-greens}
+plot_normal(palette = "greens", mode = "dark")
+```
+
+```{r dark-diverging}
+plot_normal(palette = "diverging", mode = "dark")
+```
+
+## Text size
+
+The chart keeps its proportions, about 2.2 times as wide as it is tall, so text that is the right
+size on a small figure is too small on a large one. `size` is the text size in millimetres: the
+default of 3 suits figures about 7 inches wide, and about 5 suits figures about 12 inches wide.
+The lines, the gaps between the bands and their rounded corners grow with it.
+
+```{r size, fig.width = 12, fig.height = 5.5}
+plot_normal(size = 5)
+```
+
+## Saving
+
+`plot_normal()` returns a ggplot object, so `ggsave()` saves it. A figure with the proportions of
+the chart has no empty margins:
+
+```{r save, eval = FALSE}
+ggsave("normal.png", plot_normal(), width = 7, height = 3.2)
+ggsave("normal_large.png", plot_normal(size = 5), width = 12, height = 5.5)
+ggsave("normal.pdf", plot_normal(palette = "diverging"), width = 7, height = 3.2)
+```
+
+## The scales as data
+
+The scales under the curve are a data frame, which `standard_normal_scales_data()` returns:
+
+```{r data}
+scales <- standard_normal_scales_data()
+head(scales)
+unique(scales$scale)
+```
+
+Each row is a tick mark or a band:
+
+- `scale`: the name of the scale, shown at the left of its row. Rows are drawn from top to bottom
+  in the order the names first appear.
+- `z`: where the tick mark goes on the z axis, or where the band starts.
+- `z_end`: where the band ends, or `NA` for a tick mark.
+- `label`: the text at the tick mark or inside the band.
+- `colour`: the fill of the band, or `NA` for the colours of the palette.
+
+Change the data frame and pass it to `plot_normal()` as its first argument, `scales`. Every scale
+you add makes the chart taller, so the figures below change height with the number of scales.
+
+## Choosing scales
+
+Keep the rows of the scales you want:
+
+```{r keep, fig.height = 2.2}
+plot_normal(scales[scales$scale %in% c("z", "T", "IQ"), ])
+```
+
+Sort the rows to change the order of the scales:
+
+```{r reorder, fig.height = 2.4}
+wanted <- c("IQ", "PERCENTILE", "STANINE", "z")
+reordered <- scales[scales$scale %in% wanted, ]
+reordered <- reordered[order(match(reordered$scale, wanted)), ]
+plot_normal(reordered)
+```
+
+Rename a scale by changing its `scale` column:
+
+```{r rename}
+renamed <- scales
+renamed$scale[renamed$scale == "z"] <- "Z SCORE"
+renamed$scale[renamed$scale == "CUMULATIVE %"] <- "% BELOW"
+plot_normal(renamed)
+```
+
+## Adding tick marks
+
+Any scale that is a linear transformation of z, a mean plus a number of standard deviations, is a
+row of tick marks. A small function makes them, in the columns of the standard scales so that
+`rbind()` can join them:
+
+```{r linear-scale}
+linear_scale <- function(name, mean, sd, z = -3:3) {
+  data.frame(scale = name, z = z, z_end = NA, label = mean + sd * z, colour = NA)
+}
+```
+
+Wechsler subtest scaled scores have a mean of 10 and a standard deviation of 3, and CEEB scores a
+mean of 500 and a standard deviation of 100:
+
+```{r add, fig.height = 3.6}
+plot_normal(rbind(scales, linear_scale("SCALED", 10, 3), linear_scale("CEEB", 500, 100)))
+```
+
+Tick marks need not sit at whole standard deviations. Normal curve equivalents (NCE) have a mean
+of 50 and a standard deviation of 21.06, and are usually labelled at round values, each placed at
+its own z. NCE 1, 50 and 99 fall on the 1st, 50th and 99th percentiles:
+
+```{r nce, fig.height = 2.2}
+nce <- c(1, 10, 25, 50, 75, 90, 99)
+nce_scale <- data.frame(scale = "NCE", z = (nce - 50) / 21.06, z_end = NA, label = nce, colour = NA)
+plot_normal(rbind(scales[scales$scale %in% c("z", "PERCENTILE"), ], nce_scale))
+```
+
+## Adding bands
+
+A band runs from `z` to `z_end`. `qnorm()` gives the z at which a percentage of cases falls
+below, so it cuts bands that hold equal shares of cases, such as quartiles and deciles:
+
+```{r quantiles, fig.height = 2.2}
+quantile_bands <- function(name, n) {
+  cuts <- qnorm(seq_len(n - 1) / n)
+  data.frame(scale = name, z = c(-4, cuts), z_end = c(cuts, 4), label = seq_len(n), colour = NA)
+}
+plot_normal(rbind(scales[scales$scale == "PERCENTILE", ],
+                  quantile_bands("QUARTILE", 4),
+                  quantile_bands("DECILE", 10)))
+```
+
+Bands in the units of another scale are placed by converting their limits to z, here IQ ranges
+one standard deviation wide:
+
+```{r iq-ranges, fig.height = 2.2}
+iq <- c(40, 70, 85, 115, 130, 160)
+iq_ranges <- data.frame(scale = "IQ RANGE", z = (head(iq, -1) - 100) / 15, z_end = (iq[-1] - 100) / 15,
+                        label = c("<70", "70-84", "85-114", "115-129", "130+"), colour = NA)
+plot_normal(rbind(scales[scales$scale %in% c("PERCENTILE", "IQ"), ], iq_ranges))
+```
+
+Bands need not cover the whole axis; a row can hold only the bands it needs:
+
+```{r gaps, fig.height = 2.2}
+extremes <- data.frame(scale = "EXTREMES", z = c(-4, 2), z_end = c(-2, 4),
+                       label = c("Very low", "Very high"), colour = NA)
+plot_normal(rbind(scales[scales$scale %in% c("z", "PERCENTILE"), ], extremes))
+```
+
+## Colouring bands yourself
+
+A band with a `colour` keeps it whatever the palette; the labels on it turn white or near-black,
+whichever stands out more. A pass mark one standard deviation below the mean:
+
+```{r decision, fig.height = 2.2}
+decision <- data.frame(scale = "DECISION", z = c(-4, -1), z_end = c(-1, 4),
+                       label = c("Fail", "Pass"), colour = c("#c74845", "#31902c"))
+plot_normal(rbind(scales[scales$scale %in% c("z", "T"), ], decision))
+```
+
+Bands with and without a colour can share a row, here stanines 7 to 9 picked out and the rest left
+to the palette:
+
+```{r highlight, fig.height = 2.0}
+stanine <- scales[scales$scale == "STANINE", ]
+stanine$colour[stanine$label %in% 7:9] <- "#c74845"
+plot_normal(rbind(scales[scales$scale == "z", ], stanine))
+```
+
+## Scales of your own only
+
+The scales need not include any of the standard ones. A test with raw scores of mean 24 and
+standard deviation 5, and four performance levels cut at raw scores of 15, 22 and 30; the `colour`
+column is optional and left out:
+
+```{r own, fig.height = 2.0}
+raw <- seq(10, 40, 5)
+cuts <- (c(15, 22, 30) - 24) / 5
+test <- rbind(data.frame(scale = "RAW SCORE", z = (raw - 24) / 5, z_end = NA, label = raw),
+              data.frame(scale = "LEVEL", z = c(-4, cuts), z_end = c(cuts, 4),
+                         label = c("Below basic", "Basic", "Proficient", "Advanced")))
+plot_normal(test, palette = "diverging")
+```
+
+## Adding to the chart
+
+The chart is a ggplot object, so ggplot2 layers can be added to it. Its x axis is the z axis, and
+the curve is `dnorm(z)` high, so a score is easy to place. Mark a score of z = 1.3:
+
+```{r mark}
+score <- 1.3
+plot_normal() +
+  annotate("point", x = score, y = dnorm(score), size = 3, colour = "#c74845") +
+  annotate("text", x = score, y = dnorm(score), label = "z = 1.3", hjust = -0.25, vjust = -0.5,
+           size = 3, colour = "#c74845")
+```
+
+Shade the 5% of cases furthest from the mean, below z = -1.96 and above z = 1.96:
+
+```{r tails}
+upper <- seq(qnorm(0.975), 4, 0.01)
+plot_normal(palette = "diverging") +
+  annotate("ribbon", x = -upper, ymin = 0, ymax = dnorm(upper), fill = "#c74845", alpha = 0.7) +
+  annotate("ribbon", x = upper, ymin = 0, ymax = dnorm(upper), fill = "#c74845", alpha = 0.7)
+```
+
+Add a title:
+
+```{r title, fig.height = 3.5}
+plot_normal() + labs(title = "Scores on the standard normal curve")
+```
