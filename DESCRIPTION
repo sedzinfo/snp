@@ -5,7 +5,7 @@ Authors@R: person("Dimitrios", "Zacharatos", , "dzacharatos@yahoo.com", role = c
            comment = c(ORCID = "0000-0003-1789-8294"))
 Depends: ggplot2
 Imports: grDevices, grid, stats
-Suggests: knitr, rmarkdown
+Suggests: knitr, rmarkdown, testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Description: Draws the standard normal curve with score scales lined up under it: z, T,
     cumulative percentage, percentile, sten, stanine, grade and IQ, or scales defined in a
@@ -16,3 +16,4 @@ URL: https://sedzinfo.github.io/snp/, https://github.com/sedzinfo/snp
 BugReports: https://github.com/sedzinfo/snp/issues
 Encoding: UTF-8
 Config/roxygen2/version: 8.1.1
+Config/testthat/edition: 3
