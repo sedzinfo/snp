@@ -15,7 +15,7 @@ destination: docs
 
 navbar:
   structure:
-    left: [intro, reference, articles]
+    left: [intro, reference, articles, news]
     right: [sedzinfo, github]
   components:
     sedzinfo:

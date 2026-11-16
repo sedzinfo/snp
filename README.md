@@ -63,3 +63,4 @@ More examples, from palettes and sizes to scales of your own, are in the [Exampl
 ![Contributors](https://img.shields.io/github/contributors/sedzinfo/snp)
 ![License](https://img.shields.io/github/license/sedzinfo/snp)
 ![Workflow Status](https://img.shields.io/github/actions/workflow/status/sedzinfo/snp/build-tarball.yml)
+![R CMD check](https://img.shields.io/github/actions/workflow/status/sedzinfo/snp/R-CMD-check.yaml?label=R%20CMD%20check)
