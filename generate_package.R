@@ -2,8 +2,11 @@
 # DIRECTORIES
 ##########################################################################################
 # R CMD check snp
+# R CMD Rd2pdf snp
+# R CMD build snp --resave-data
 # .rs.restartR()
 library(devtools)
+library(roxygen2)
 rm(list = ls())
 graphics.off()
 cat("\014")
@@ -12,6 +15,7 @@ cat("\014")
 ##########################################################################################
 directory <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(directory)
+# usethis::create_package("snp")
 document()
 if ("snp" %in% loadedNamespaces()) unloadNamespace("snp") # an old version still loaded would make the reinstalled one look corrupt
 if ("snp" %in% rownames(installed.packages())) remove.packages("snp")
