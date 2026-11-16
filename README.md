@@ -40,6 +40,8 @@ plot_normal(my_scales)
 
 `standard_normal_scales_data()` returns the standard scales as a data frame, to start from when changing them.
 
+More examples, from palettes and sizes to scales of your own, are in the [Examples](https://sedzinfo.github.io/snp/articles/examples.html) article.
+
 # Screenshot
 
 <img src="https://raw.githubusercontent.com/sedzinfo/snp/master/snp.png" alt="The standard normal curve with the share of cases in each standard deviation band (34.13%, 13.59%, 2.14%, 0.13%), above aligned scales of z scores, T scores, cumulative percentages, percentiles, stens, stanines, grades and IQ, all in blues, darker where more cases fall">
