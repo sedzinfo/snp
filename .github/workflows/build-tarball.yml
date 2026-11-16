@@ -8,7 +8,6 @@ on:
       - "man/**"
       - "DESCRIPTION"
       - "NAMESPACE"
-      - "LICENSE"
       - ".Rbuildignore"
       - ".github/workflows/build-tarball.yml"
   workflow_dispatch:                              # also allows a manual run from the Actions tab

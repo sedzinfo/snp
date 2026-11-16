@@ -3,10 +3,8 @@ Title: Plot standard normal distribution
 Version: 0.0.0.9000
 Authors@R: person("Dimitrios", "Zacharatos", , "dimitrios@psycholate.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-1789-8294"))
-Author: Dimitrios Zacharatos [aut, cre]
-Maintainer: Dimitrios Zacharatos <dimitrios@psycholate.com>
 Depends: ggplot2
-Imports: grDevices, grid
+Imports: grDevices, grid, stats
 Description: Draws the standard normal curve with score scales lined up under it: z, T,
     cumulative percentage, percentile, sten, stanine, grade and IQ, or scales defined in a
     data frame, each shown as labelled tick marks or coloured bands, in blues, reds, greens
@@ -15,5 +13,4 @@ License: GPL-3
 URL: https://sedzinfo.github.io/snp/, https://github.com/sedzinfo/snp
 BugReports: https://github.com/sedzinfo/snp/issues
 Encoding: UTF-8
-LazyData: true
 Config/roxygen2/version: 8.1.1

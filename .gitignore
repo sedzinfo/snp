@@ -5,3 +5,6 @@
 # on the "latest" release, so they are not committed
 /*.tar.gz
 /snp.pdf
+
+# the pkgdown site: the pkgdown workflow builds and publishes it, so a local build is only a preview
+/docs/
