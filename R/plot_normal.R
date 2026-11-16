@@ -37,8 +37,8 @@
 #' @details The labels on the coloured areas are white or near-black, whichever stands out more
 #'   from the colour behind them. The names of the scales are in a column of their own, just
 #'   left of the scales, so a long name never runs into them. The percentages are on one line,
-#'   each centred over its interval, raised from the base of the curve by heights of their text,
-#'   so that they keep their place whatever the size of the figure. The lines, the gaps between
+#'   each over its interval, raised from the base of the curve by heights of their text, so that
+#'   they keep their place whatever the size of the figure. The lines, the gaps between
 #'   the bands and their rounded corners grow with \code{size}, as the text does.
 #' @return A ggplot object. Print it to draw the chart, or save it with
 #'   \code{ggplot2::ggsave()}. The chart keeps a fixed aspect ratio, and every scale you add
@@ -105,11 +105,14 @@ plot_normal<-function(scales=standard_normal_scales_data(),size=3,
   bands$xmax<-pmax(bands$z,bands$z_end)
   uncoloured<-is.na(bands$colour)
   bands$colour[uncoloured]<-band_colours(bands$xmin[uncoloured],bands$xmax[uncoloured],palette,mode)
-  # the percentage of cases between two standard deviations, all on one line, each centred over
-  # its interval: inside the curve in the middle, in the ink that stands out from their region,
-  # and just above the curve in the tails, where it is lower than the text. The line is raised
-  # from the base by heights of the text, so that it keeps its place whatever the size of the figure
-  percentages<-data.frame(x=-3.5:3.5,label=c("0.13%","2.14%","13.59%","34.13%","34.13%","13.59%","2.14%","0.13%"))
+  # the percentage of cases between two standard deviations, all on one line, each over its
+  # interval: inside the curve in the middle, in the ink that stands out from their region, and
+  # above the curve in the tails, where it is lower than the text. Where the curve crosses the
+  # line, between z = 2 and 3 in height of text, 2.14% sits outward and 13.59% inward of the middle
+  # of their intervals, clear of it. The line is raised from the base by heights of the text, so
+  # that it keeps its place whatever the size of the figure
+  percentages<-data.frame(x=c(-3.5,-2.7,-1.45,-.5,.5,1.45,2.7,3.5),
+                          label=c("0.13%","2.14%","13.59%","34.13%","34.13%","13.59%","2.14%","0.13%"))
   percentages$ink<-ink$text
   percentages$ink[3:6]<-label_ink(style$regions[c(2,1,1,2)])
   normal_plot<-ggplot()+
@@ -117,7 +120,7 @@ plot_normal<-function(scales=standard_normal_scales_data(),size=3,
     # the regions divided by gaps of the background colour
     annotate("segment",x=z_score,xend=z_score,y=0,yend=dnorm(z_score),linewidth=.6*k,colour=ink$surface)+
     geom_line(data=snd,aes(x=.data$x,y=.data$y),linewidth=.75*k,colour=style$curve,linejoin="round")+
-    annotate("text",x=percentages$x,y=0,label=percentages$label,vjust=-1.9,size=size,colour=percentages$ink)+
+    annotate("text",x=percentages$x,y=0,label=percentages$label,vjust=-1.5,size=size,colour=percentages$ink)+
     # the rules run the width of the figure, under the names of the scales too
     annotate("segment",x=-100,xend=100,y=rows$y+.02,yend=rows$y+.02,linewidth=.3*k,colour=ink$rule)
   for (i in seq_len(nrow(bands))) normal_plot<-normal_plot+
