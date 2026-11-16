@@ -27,15 +27,15 @@ install.packages(
 # Usage
 ```r
 library(snp)
-standard_normal_scales()                                  # for figures about 7 inches wide
-standard_normal_scales(size = 5)                          # for figures about 12 inches wide
-standard_normal_scales(palette = "greens", mode = "dark")  # blues, reds, greens or diverging; light or dark
-ggsave("snp.png", standard_normal_scales(), width = 7, height = 3.2)
+plot_normal()                                   # for figures about 7 inches wide
+plot_normal(size = 5)                           # for figures about 12 inches wide
+plot_normal(palette = "greens", mode = "dark")  # blues, reds, greens or diverging; light or dark
+ggsave("snp.png", plot_normal(), width = 7, height = 3.2)
 
 # your own scales: tick marks for a test score and bands for performance levels
 my_scales <- rbind(data.frame(scale = "SCORE", z = -3:3, z_end = NA, label = seq(20, 80, 10)),
                    data.frame(scale = "LEVEL", z = c(-4, -1, 1), z_end = c(-1, 1, 4), label = c("Low", "Average", "High")))
-standard_normal_custom(my_scales)
+plot_normal(my_scales)
 ```
 
 `standard_normal_scales_data()` returns the standard scales as a data frame, to start from when changing them.
