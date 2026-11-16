@@ -59,10 +59,10 @@ frame. A scale can be a row of labelled tick marks (like T scores), a row of col
 \details{
 The labels on the coloured areas are white or near-black, whichever stands out more
   from the colour behind them. The names of the scales are in a column of their own, just
-  left of the scales, so a long name never runs into them. The percentages are kept off the
-  curve by distances in heights of their text, so they keep their place whatever the size of
-  the figure. The lines, the gaps between the bands and their rounded corners grow with
-  \code{size}, as the text does.
+  left of the scales, so a long name never runs into them. The percentages are on one line,
+  each centred over its interval, raised from the base of the curve by heights of their text,
+  so that they keep their place whatever the size of the figure. The lines, the gaps between
+  the bands and their rounded corners grow with \code{size}, as the text does.
 }
 \examples{
 plot_normal()
