@@ -107,10 +107,10 @@ plot_normal<-function(scales=standard_normal_scales_data(),size=3,
   bands$colour[uncoloured]<-band_colours(bands$xmin[uncoloured],bands$xmax[uncoloured],palette,mode)
   # the percentage of cases between two standard deviations, all on one line, each over its
   # interval: inside the curve in the middle, in the ink that stands out from their region, and
-  # above the curve in the tails, where it is lower than the text. Where the curve crosses the
-  # line, between z = 2 and 3 in height of text, 2.14% sits outward and 13.59% inward of the middle
-  # of their intervals, clear of it. The line is raised from the base by heights of the text, so
-  # that it keeps its place whatever the size of the figure
+  # above the curve in the tails, where it is lower than the text. The curve crosses the line near
+  # z = -2 and 2, so there 2.14% sits outward and 13.59% inward of the middle of their intervals,
+  # to keep clear of it. The line is raised from the base by heights of the text, so that it keeps
+  # its place whatever the size of the figure
   percentages<-data.frame(x=c(-3.5,-2.7,-1.45,-.5,.5,1.45,2.7,3.5),
                           label=c("0.13%","2.14%","13.59%","34.13%","34.13%","13.59%","2.14%","0.13%"))
   percentages$ink<-ink$text
