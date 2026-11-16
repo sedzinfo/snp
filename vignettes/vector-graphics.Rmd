@@ -23,7 +23,7 @@ library(snp)
 
 The chart below is itself an SVG: zoom into the page and it stays sharp.
 
-```{r demo, dev = "svg", fig.ext = "svg"}
+```{r demo, dev = "svg", fig.ext = "svg", fig.alt = "The standard normal curve, divided at every standard deviation and marked with the percentage of cases in each interval, above the z, T, cumulative percentage, percentile, sten, stanine, grade and IQ scales, drawn as an SVG."}
 plot_normal()
 ```
 

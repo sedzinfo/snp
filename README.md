@@ -44,13 +44,13 @@ More examples, from palettes and sizes to scales of your own, are in the [Exampl
 
 # Screenshot
 
-<img src="https://raw.githubusercontent.com/sedzinfo/snp/master/snp.png" alt="The standard normal curve with the share of cases in each standard deviation band (34.13%, 13.59%, 2.14%, 0.13%), above aligned scales of z scores, T scores, cumulative percentages, percentiles, stens, stanines, grades and IQ, all in blues, darker where more cases fall">
+<img src="https://raw.githubusercontent.com/sedzinfo/snp/master/snp.svg" alt="The standard normal curve with the share of cases in each standard deviation band (34.13%, 13.59%, 2.14%, 0.13%), above aligned scales of z scores, T scores, cumulative percentages, percentiles, stens, stanines, grades and IQ, all in blues, darker where more cases fall">
 
 # Palettes
 
 `palette` sets the colours, `"blues"` (the default), `"reds"`, `"greens"` or `"diverging"`, and `mode` the background, `"light"` (the default) or `"dark"`:
 
-<img src="https://raw.githubusercontent.com/sedzinfo/snp/master/palettes.png" alt="The chart in every palette and mode: blues, reds and greens, darker where more cases fall, and the diverging palette, with the bands blue below the mean and red above it, each on a light and on a dark background">
+<img src="https://raw.githubusercontent.com/sedzinfo/snp/master/palettes.svg" alt="The chart in every palette and mode: blues, reds and greens, darker where more cases fall, and the diverging palette, with the bands blue below the mean and red above it, each on a light and on a dark background">
 
 ---
 
