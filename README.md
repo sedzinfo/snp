@@ -1,6 +1,6 @@
 # Standard Normal Plot
 
-Draws the standard normal curve in R with score scales lined up under it: z, T, percentile, sten, stanine, grade and IQ, so that a score on one scale can be read off on the others. The sten, stanine and grade bands are coloured by where they sit against the mean: gray at the mean, blue below it and red above it, darker the further from the mean.
+Draws the standard normal curve in R with score scales lined up under it: z, T, cumulative percentage, percentile, sten, stanine, grade and IQ, so that a score on one scale can be read off on the others. The sten, stanine and grade bands are coloured by where they sit against the mean: gray at the mean, blue below it and red above it, darker the further from the mean.
 
 # Installation Instructions
 ## install R
@@ -29,7 +29,7 @@ install.packages(
 library(snp)
 standard_normal_plot()            # for large figures, about 12 inches wide
 standard_normal_scales()          # the same chart for figures about 7 inches wide
-ggsave("snp.png", standard_normal_scales(), width = 7, height = 2.8)
+ggsave("snp.png", standard_normal_scales(), width = 7, height = 3.2)
 
 # your own scales: tick marks for a test score and bands for performance levels
 my_scales <- rbind(data.frame(scale = "SCORE", z = -3:3, z_end = NA, label = seq(20, 80, 10)),
@@ -41,7 +41,7 @@ standard_normal_custom(my_scales)
 
 # Screenshot
 
-<img src="https://raw.githubusercontent.com/sedzinfo/snp/master/snp.png" alt="The standard normal curve with the share of cases in each standard deviation band (34.13%, 13.59%, 2.14%, 0.13%), above aligned scales of z scores, T scores, percentiles, stens, stanines, grades and IQ, the sten, stanine and grade bands blue below the mean, gray at it and red above it">
+<img src="https://raw.githubusercontent.com/sedzinfo/snp/master/snp.png" alt="The standard normal curve with the share of cases in each standard deviation band (34.13%, 13.59%, 2.14%, 0.13%), above aligned scales of z scores, T scores, cumulative percentages, percentiles, stens, stanines, grades and IQ, the sten, stanine and grade bands blue below the mean, gray at it and red above it">
 
 ---
 

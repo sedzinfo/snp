@@ -13,14 +13,15 @@ labels keep their room.}
 }
 \value{
 A ggplot object. Print it to draw the chart, or save it with
-  \code{ggplot2::ggsave()}. The chart keeps a fixed aspect ratio and is about 2.5 times as
-  wide as it is tall, so a figure with those proportions has no empty margins.
+  \code{ggplot2::ggsave()}. The chart keeps a fixed aspect ratio and is about 2.2 times as
+  wide as it is tall, so a figure with those proportions, such as 7 by 3.2 inches, has no
+  empty margins.
 }
 \description{
 Draws the standard normal curve, divided at every standard deviation and marked
-with the percentage of cases in each interval, with the z, T, percentile, sten, stanine,
-grade and IQ scales lined up under it, so that a score on one scale can be read off on the
-others. The sten, stanine and grade bands are coloured by where they sit against the mean:
+with the percentage of cases in each interval, with the z, T, cumulative percentage,
+percentile, sten, stanine, grade and IQ scales lined up under it, so that a score on one
+scale can be read off on the others. The sten, stanine and grade bands are coloured by where they sit against the mean:
 gray for the band centred on the mean, blue below it and red above it, darker the further
 from the mean. The bands are sized in plot units, so the rows never overlap whatever the
 size of the figure.
@@ -30,6 +31,8 @@ All scales are placed on the z axis:
 \itemize{
   \item \strong{z}: standard score, mean 0 and standard deviation 1.
   \item \strong{T}: \eqn{50 + 10z}.
+  \item \strong{Cumulative \%}: the percentage of cases below each standard deviation, from
+    \eqn{z = -3} to \eqn{z = 3}: 0.1, 2.3, 15.9, 50, 84.1, 97.7 and 99.9.
   \item \strong{Percentile}: the z values of the 1st, 5th, 10th, 25th, 50th, 75th, 90th,
     95th and 99th percentiles.
   \item \strong{Sten}: ten bands half a standard deviation wide, sten 1 below \eqn{z = -2}
@@ -46,7 +49,7 @@ The chart is \code{\link{standard_normal_custom}} drawn with
 standard_normal_scales()
 standard_normal_scales(size=4)
 # save it with the chart's proportions
-ggsave(file.path(tempdir(),"standard_normal_scales.png"),standard_normal_scales(),width=7,height=2.8)
+ggsave(file.path(tempdir(),"standard_normal_scales.png"),standard_normal_scales(),width=7,height=3.2)
 }
 \seealso{
 \code{\link{standard_normal_plot}}, \code{\link{standard_normal_custom}}

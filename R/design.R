@@ -68,13 +68,14 @@ label_ink<-function(fill) {
 #' @title A band of a scale, as a rounded block
 #' @description Fills the rectangle it is placed in with \code{ggplot2::annotation_custom()},
 #' less a gap of 2 pixels (1.5 points) that separates it from the next band, with corners
-#' rounded by 3 points. The gap and the corners are in points, so they keep their size
-#' whatever the size of the figure.
+#' rounded by 3 points, both at the default text size of 3 and growing with it. The gap and
+#' the corners are in points, so they keep their size whatever the size of the figure.
 #' @param fill Colour of the band.
+#' @param k How much larger than at the default text size of 3 to make the gap and the corners.
 #' @return A grid grob.
 #' @noRd
-band_grob<-function(fill) {
-  grid::roundrectGrob(width=grid::unit(1,"npc")-grid::unit(1.5,"pt"),
-                      r=grid::unit(3,"pt"),
+band_grob<-function(fill,k=1) {
+  grid::roundrectGrob(width=grid::unit(1,"npc")-grid::unit(1.5*k,"pt"),
+                      r=grid::unit(3*k,"pt"),
                       gp=grid::gpar(fill=fill,col=NA))
 }

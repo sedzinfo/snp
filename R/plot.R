@@ -3,13 +3,15 @@
 ##########################################################################################
 #' @title Plot the standard normal curve with score scales
 #' @description Draws the standard normal curve, divided at every standard deviation and marked
-#' with the percentage of cases in each interval, and lines up under it the z, T, percentile,
-#' sten, stanine, grade and IQ scales, so that a score on one scale can be read off on the
-#' others.
+#' with the percentage of cases in each interval, and lines up under it the z, T, cumulative
+#' percentage, percentile, sten, stanine, grade and IQ scales, so that a score on one scale can
+#' be read off on the others.
 #' @details All scales are placed on the z axis:
 #' \itemize{
 #'   \item \strong{z}: standard score, mean 0 and standard deviation 1.
 #'   \item \strong{T}: \eqn{50 + 10z}.
+#'   \item \strong{Cumulative \%}: the percentage of cases below each standard deviation, from
+#'     \eqn{z = -3} to \eqn{z = 3}: 0.1, 2.3, 15.9, 50, 84.1, 97.7 and 99.9.
 #'   \item \strong{Percentile}: the z values of the 1st, 5th, 10th, 25th, 50th, 75th, 90th,
 #'     95th and 99th percentiles.
 #'   \item \strong{Sten}: ten bands half a standard deviation wide, sten 1 below \eqn{z = -2}
@@ -24,8 +26,9 @@
 #' @param size Text size of all labels, in millimetres (ggplot2 text size). The default of 5
 #'   suits large figures, about 12 inches wide; use about 3 for figures around 7 inches wide.
 #' @return A ggplot object. Print it to draw the chart, or save it with
-#'   \code{ggplot2::ggsave()}. The chart keeps a fixed aspect ratio and is about 2.5 times as
-#'   wide as it is tall, so a figure with those proportions has no empty margins.
+#'   \code{ggplot2::ggsave()}. The chart keeps a fixed aspect ratio and is about 2.15 times as
+#'   wide as it is tall, so a figure with those proportions, such as 12 by 5.6 inches, has no
+#'   empty margins.
 #' @seealso \code{\link{standard_normal_scales}}, \code{\link{standard_normal_custom}}
 #' @import ggplot2
 #' @export

@@ -8,8 +8,8 @@ Maintainer: Dimitrios Zacharatos <dimitrios@psycholate.com>
 Depends: ggplot2
 Imports: grDevices, grid
 Description: Draws the standard normal curve with score scales lined up under it: z, T,
-    percentile, sten, stanine, grade and IQ, or scales defined in a data frame, each shown
-    as labelled tick marks or coloured bands.
+    cumulative percentage, percentile, sten, stanine, grade and IQ, or scales defined in a
+    data frame, each shown as labelled tick marks or coloured bands.
 License: GPL-3
 URL: https://sedzinfo.github.io/snp/, https://github.com/sedzinfo/snp
 BugReports: https://github.com/sedzinfo/snp/issues

@@ -38,8 +38,11 @@ coloured bands (like stanines), or both.
 }
 \details{
 The labels inside the bands are white or near-black, whichever stands out more from
-  the colour of the band. The bands are separated by a thin gap and have rounded corners,
-  both of a fixed size in points, so they look the same whatever the size of the figure.
+  the colour of the band. The names of the scales are in a column of their own, just left of
+  the scales, so a long name never runs into them. The percentages are kept off the curve by
+  distances in heights of their text, so they keep their place whatever the size of the
+  figure. The lines, the gaps between the bands and their rounded corners grow with
+  \code{size}, as the text does.
 }
 \examples{
 standard_normal_custom()

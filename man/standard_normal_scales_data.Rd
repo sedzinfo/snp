@@ -8,11 +8,13 @@ standard_normal_scales_data()
 }
 \value{
 A data frame with the columns scale, z, z_end, label and colour, and one row per
-  tick mark (z, T, percentile and IQ, with \code{z_end} and \code{colour} set to \code{NA})
+  tick mark (z, T, cumulative percentage, percentile and IQ, with \code{z_end} and
+  \code{colour} set to \code{NA})
   or per band (sten, stanine and grade, coloured by where they sit against the mean).
 }
 \description{
-Returns the z, T, percentile, sten, stanine, grade and IQ scales of
+Returns the z, T, cumulative percentage, percentile, sten, stanine, grade and
+IQ scales of
 \code{\link{standard_normal_scales}} in the format \code{\link{standard_normal_custom}}
 takes, so you can start from them and change, remove or add scales.
 }
