@@ -4,7 +4,12 @@
 \alias{standard_normal_custom}
 \title{Plot the standard normal curve with your own score scales}
 \usage{
-standard_normal_custom(scales = standard_normal_scales_data(), size = 3)
+standard_normal_custom(
+  scales = standard_normal_scales_data(),
+  size = 3,
+  palette = c("blues", "reds", "greens", "diverging"),
+  mode = c("light", "dark")
+)
 }
 \arguments{
 \item{scales}{A data frame with one row per tick mark or band, and the columns:
@@ -15,15 +20,27 @@ standard_normal_custom(scales = standard_normal_scales_data(), size = 3)
   \item{label}{Text shown at the tick mark or inside the band.}
   \item{z_end}{Optional. Where the band ends on the z axis. Leave the column out, or use
     \code{NA}, for a tick mark.}
-  \item{colour}{Optional. Fill colour of the band. Bands without a colour are coloured by
-    where they sit against the mean: gray for a band centred on the mean, blue below it and
-    red above it, darker the further from the mean.}
+  \item{colour}{Optional. Fill colour of the band. Bands without a colour take the colours
+    of \code{palette}.}
 }
 The default, \code{\link{standard_normal_scales_data}()}, holds the scales of
 \code{\link{standard_normal_scales}}.}
 
 \item{size}{Text size of all labels, in millimetres (ggplot2 text size). The default of 3
-suits figures around 7 inches wide.}
+suits figures around 7 inches wide; about 5 suits figures around 12 inches wide.}
+
+\item{palette}{The colours of the chart:
+\describe{
+  \item{"blues", "reds" or "greens"}{One colour, which shows how common a score is: under
+    the curve, the intervals that hold more cases are darker, so 34.13\% is the darkest and
+    0.13\% the lightest, and the bands are darker the nearer the mean they are.}
+  \item{"diverging"}{A neutral gray under the curve, and bands blue below the mean and red
+    above it, darker the further from the mean, with gray for a band centred on the mean.}
+}}
+
+\item{mode}{\code{"light"} for dark text on a white background, or \code{"dark"} for light
+text on a near-black background. In the dark mode the colours that are darker in the light
+mode are brighter instead, so that they still stand out from the background.}
 }
 \value{
 A ggplot object. Print it to draw the chart, or save it with
@@ -37,19 +54,21 @@ lined up under it. A scale can be a row of labelled tick marks (like T scores), 
 coloured bands (like stanines), or both.
 }
 \details{
-The labels inside the bands are white or near-black, whichever stands out more from
-  the colour of the band. The names of the scales are in a column of their own, just left of
-  the scales, so a long name never runs into them. The percentages are kept off the curve by
-  distances in heights of their text, so they keep their place whatever the size of the
-  figure. The lines, the gaps between the bands and their rounded corners grow with
+The labels on the coloured areas are white or near-black, whichever stands out more
+  from the colour behind them. The names of the scales are in a column of their own, just
+  left of the scales, so a long name never runs into them. The percentages are kept off the
+  curve by distances in heights of their text, so they keep their place whatever the size of
+  the figure. The lines, the gaps between the bands and their rounded corners grow with
   \code{size}, as the text does.
 }
 \examples{
 standard_normal_custom()
+standard_normal_custom(palette="greens",mode="dark")
 # your own scales: tick marks for a test score and bands for performance levels
 my_scales<-rbind(data.frame(scale="SCORE",z=-3:3,z_end=NA,label=seq(20,80,10)),
-                 data.frame(scale="LEVEL",z=c(-4,-1,1),z_end=c(-1,1,4),label=c("Low","Average","High")))
-standard_normal_custom(my_scales)
+                 data.frame(scale="LEVEL",z=c(-4,-1,1),z_end=c(-1,1,4),
+                            label=c("Low","Average","High")))
+standard_normal_custom(my_scales,palette="diverging")
 # start from the standard scales, drop the grades and add Wechsler scaled scores (mean 10, SD 3)
 scales<-standard_normal_scales_data()
 scales<-scales[scales$scale!="GRADE",]

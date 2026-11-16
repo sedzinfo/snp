@@ -2,14 +2,30 @@
 % Please edit documentation in R/standard_normal_scales.R
 \name{standard_normal_scales}
 \alias{standard_normal_scales}
-\title{Plot the standard normal curve with score scales at any figure size}
+\title{Plot the standard normal curve with score scales}
 \usage{
-standard_normal_scales(size = 3)
+standard_normal_scales(
+  size = 3,
+  palette = c("blues", "reds", "greens", "diverging"),
+  mode = c("light", "dark")
+)
 }
 \arguments{
 \item{size}{Text size of all labels, in millimetres (ggplot2 text size). The default of 3
-suits figures around 7 inches wide; for larger text, use a larger figure so that the
-labels keep their room.}
+suits figures around 7 inches wide; about 5 suits figures around 12 inches wide.}
+
+\item{palette}{The colours of the chart:
+\describe{
+  \item{"blues", "reds" or "greens"}{One colour, which shows how common a score is: under
+    the curve, the intervals that hold more cases are darker, so 34.13\% is the darkest and
+    0.13\% the lightest, and the bands are darker the nearer the mean they are.}
+  \item{"diverging"}{A neutral gray under the curve, and bands blue below the mean and red
+    above it, darker the further from the mean, with gray for a band centred on the mean.}
+}}
+
+\item{mode}{\code{"light"} for dark text on a white background, or \code{"dark"} for light
+text on a near-black background. In the dark mode the colours that are darker in the light
+mode are brighter instead, so that they still stand out from the background.}
 }
 \value{
 A ggplot object. Print it to draw the chart, or save it with
@@ -21,10 +37,9 @@ A ggplot object. Print it to draw the chart, or save it with
 Draws the standard normal curve, divided at every standard deviation and marked
 with the percentage of cases in each interval, with the z, T, cumulative percentage,
 percentile, sten, stanine, grade and IQ scales lined up under it, so that a score on one
-scale can be read off on the others. The sten, stanine and grade bands are coloured by where they sit against the mean:
-gray for the band centred on the mean, blue below it and red above it, darker the further
-from the mean. The bands are sized in plot units, so the rows never overlap whatever the
-size of the figure.
+scale can be read off on the others. In blues, reds or greens, colour shows how common a
+score is; the diverging palette colours the bands blue below the mean and red above it. Each
+palette has a light and a dark mode.
 }
 \details{
 All scales are placed on the z axis:
@@ -47,10 +62,13 @@ The chart is \code{\link{standard_normal_custom}} drawn with
 }
 \examples{
 standard_normal_scales()
-standard_normal_scales(size=4)
+standard_normal_scales(palette="reds")
+standard_normal_scales(palette="diverging",mode="dark")
+standard_normal_scales(size=5)
 # save it with the chart's proportions
-ggsave(file.path(tempdir(),"standard_normal_scales.png"),standard_normal_scales(),width=7,height=3.2)
+ggsave(file.path(tempdir(),"standard_normal_scales.png"),standard_normal_scales(),
+       width=7,height=3.2)
 }
 \seealso{
-\code{\link{standard_normal_plot}}, \code{\link{standard_normal_custom}}
+\code{\link{standard_normal_custom}}, \code{\link{standard_normal_scales_data}}
 }

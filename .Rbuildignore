@@ -9,3 +9,5 @@
 ^pkgdown$
 ^\.github$
 ^LICENSE$
+^snp\.png$
+^palettes\.png$

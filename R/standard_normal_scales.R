@@ -1,14 +1,13 @@
 ##########################################################################################
 # STANDARD NORMAL SCALES
 ##########################################################################################
-#' @title Plot the standard normal curve with score scales at any figure size
+#' @title Plot the standard normal curve with score scales
 #' @description Draws the standard normal curve, divided at every standard deviation and marked
 #' with the percentage of cases in each interval, with the z, T, cumulative percentage,
 #' percentile, sten, stanine, grade and IQ scales lined up under it, so that a score on one
-#' scale can be read off on the others. The sten, stanine and grade bands are coloured by where they sit against the mean:
-#' gray for the band centred on the mean, blue below it and red above it, darker the further
-#' from the mean. The bands are sized in plot units, so the rows never overlap whatever the
-#' size of the figure.
+#' scale can be read off on the others. In blues, reds or greens, colour shows how common a
+#' score is; the diverging palette colours the bands blue below the mean and red above it. Each
+#' palette has a light and a dark mode.
 #' @details All scales are placed on the z axis:
 #' \itemize{
 #'   \item \strong{z}: standard score, mean 0 and standard deviation 1.
@@ -26,21 +25,24 @@
 #' }
 #' The chart is \code{\link{standard_normal_custom}} drawn with
 #' \code{\link{standard_normal_scales_data}()}: start from those to change the scales.
+#' @inheritParams standard_normal_custom
 #' @param size Text size of all labels, in millimetres (ggplot2 text size). The default of 3
-#'   suits figures around 7 inches wide; for larger text, use a larger figure so that the
-#'   labels keep their room.
+#'   suits figures around 7 inches wide; about 5 suits figures around 12 inches wide.
 #' @return A ggplot object. Print it to draw the chart, or save it with
 #'   \code{ggplot2::ggsave()}. The chart keeps a fixed aspect ratio and is about 2.2 times as
 #'   wide as it is tall, so a figure with those proportions, such as 7 by 3.2 inches, has no
 #'   empty margins.
-#' @seealso \code{\link{standard_normal_plot}}, \code{\link{standard_normal_custom}}
+#' @seealso \code{\link{standard_normal_custom}}, \code{\link{standard_normal_scales_data}}
 #' @import ggplot2
 #' @export
 #' @examples
 #' standard_normal_scales()
-#' standard_normal_scales(size=4)
+#' standard_normal_scales(palette="reds")
+#' standard_normal_scales(palette="diverging",mode="dark")
+#' standard_normal_scales(size=5)
 #' # save it with the chart's proportions
-#' ggsave(file.path(tempdir(),"standard_normal_scales.png"),standard_normal_scales(),width=7,height=3.2)
-standard_normal_scales<-function(size=3) {
-  standard_normal_custom(standard_normal_scales_data(),size=size)
+#' ggsave(file.path(tempdir(),"standard_normal_scales.png"),standard_normal_scales(),
+#'        width=7,height=3.2)
+standard_normal_scales<-function(size=3,palette=c("blues","reds","greens","diverging"),mode=c("light","dark")) {
+  standard_normal_custom(standard_normal_scales_data(),size=size,palette=match.arg(palette),mode=match.arg(mode))
 }

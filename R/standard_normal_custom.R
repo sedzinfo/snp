@@ -14,19 +14,29 @@
 #'   \item{label}{Text shown at the tick mark or inside the band.}
 #'   \item{z_end}{Optional. Where the band ends on the z axis. Leave the column out, or use
 #'     \code{NA}, for a tick mark.}
-#'   \item{colour}{Optional. Fill colour of the band. Bands without a colour are coloured by
-#'     where they sit against the mean: gray for a band centred on the mean, blue below it and
-#'     red above it, darker the further from the mean.}
+#'   \item{colour}{Optional. Fill colour of the band. Bands without a colour take the colours
+#'     of \code{palette}.}
 #' }
 #' The default, \code{\link{standard_normal_scales_data}()}, holds the scales of
 #' \code{\link{standard_normal_scales}}.
 #' @param size Text size of all labels, in millimetres (ggplot2 text size). The default of 3
-#'   suits figures around 7 inches wide.
-#' @details The labels inside the bands are white or near-black, whichever stands out more from
-#'   the colour of the band. The names of the scales are in a column of their own, just left of
-#'   the scales, so a long name never runs into them. The percentages are kept off the curve by
-#'   distances in heights of their text, so they keep their place whatever the size of the
-#'   figure. The lines, the gaps between the bands and their rounded corners grow with
+#'   suits figures around 7 inches wide; about 5 suits figures around 12 inches wide.
+#' @param palette The colours of the chart:
+#' \describe{
+#'   \item{"blues", "reds" or "greens"}{One colour, which shows how common a score is: under
+#'     the curve, the intervals that hold more cases are darker, so 34.13\% is the darkest and
+#'     0.13\% the lightest, and the bands are darker the nearer the mean they are.}
+#'   \item{"diverging"}{A neutral gray under the curve, and bands blue below the mean and red
+#'     above it, darker the further from the mean, with gray for a band centred on the mean.}
+#' }
+#' @param mode \code{"light"} for dark text on a white background, or \code{"dark"} for light
+#'   text on a near-black background. In the dark mode the colours that are darker in the light
+#'   mode are brighter instead, so that they still stand out from the background.
+#' @details The labels on the coloured areas are white or near-black, whichever stands out more
+#'   from the colour behind them. The names of the scales are in a column of their own, just
+#'   left of the scales, so a long name never runs into them. The percentages are kept off the
+#'   curve by distances in heights of their text, so they keep their place whatever the size of
+#'   the figure. The lines, the gaps between the bands and their rounded corners grow with
 #'   \code{size}, as the text does.
 #' @return A ggplot object. Print it to draw the chart, or save it with
 #'   \code{ggplot2::ggsave()}. The chart keeps a fixed aspect ratio, and every scale you add
@@ -36,16 +46,21 @@
 #' @export
 #' @examples
 #' standard_normal_custom()
+#' standard_normal_custom(palette="greens",mode="dark")
 #' # your own scales: tick marks for a test score and bands for performance levels
 #' my_scales<-rbind(data.frame(scale="SCORE",z=-3:3,z_end=NA,label=seq(20,80,10)),
-#'                  data.frame(scale="LEVEL",z=c(-4,-1,1),z_end=c(-1,1,4),label=c("Low","Average","High")))
-#' standard_normal_custom(my_scales)
+#'                  data.frame(scale="LEVEL",z=c(-4,-1,1),z_end=c(-1,1,4),
+#'                             label=c("Low","Average","High")))
+#' standard_normal_custom(my_scales,palette="diverging")
 #' # start from the standard scales, drop the grades and add Wechsler scaled scores (mean 10, SD 3)
 #' scales<-standard_normal_scales_data()
 #' scales<-scales[scales$scale!="GRADE",]
 #' scales<-rbind(scales,data.frame(scale="SCALED",z=-3:3,z_end=NA,label=seq(1,19,3),colour=NA))
 #' standard_normal_custom(scales)
-standard_normal_custom<-function(scales=standard_normal_scales_data(),size=3) {
+standard_normal_custom<-function(scales=standard_normal_scales_data(),size=3,
+                                 palette=c("blues","reds","greens","diverging"),mode=c("light","dark")) {
+  palette<-match.arg(palette)
+  mode<-match.arg(mode)
   if (!is.data.frame(scales)||nrow(scales)==0||!all(c("scale","z","label")%in%names(scales)))
     stop("scales must be a data frame with the columns scale, z and label (and optionally z_end and colour)",call.=FALSE)
   if (!"z_end"%in%names(scales)) scales$z_end<-NA
@@ -54,11 +69,19 @@ standard_normal_custom<-function(scales=standard_normal_scales_data(),size=3) {
     stop("the z and z_end columns of scales must be numeric",call.=FALSE)
   scales<-data.frame(scale=as.character(scales$scale),z=scales$z,z_end=as.numeric(scales$z_end),
                      label=as.character(scales$label),colour=as.character(scales$colour))
+  style<-snp_style(palette,mode)
+  ink<-style$ink
   density<-function(x) exp(-x^2/2)/sqrt(2*pi)
   z_score<- -4:4
-  # the curve over the span of the scales, where it meets the bottom of its wash
+  # the curve over the span of the scales, where it meets the bottom of the area under it
   snd<-data.frame(x=seq(-4,4,.01))
   snd$y<-density(snd$x)
+  # the area under the curve, one region per interval between standard deviations, filled by
+  # how many cases it holds: the regions of style$regions run from the mean outwards
+  regions<-do.call(rbind,lapply(-4:3,function(from) {
+    x<-seq(from,from+1,.01)
+    data.frame(x=x,y=density(x),region=from,fill=style$regions[min(abs(from),abs(from+1))+1])
+  }))
   # lines, gaps and corners grow with the text, as a larger text size is for a larger figure
   k<-size/3
   # one row per scale, .04 apart, with a hairline .02 above each row, the first included, which
@@ -74,30 +97,32 @@ standard_normal_custom<-function(scales=standard_normal_scales_data(),size=3) {
   bands$xmin<-pmin(bands$z,bands$z_end)
   bands$xmax<-pmax(bands$z,bands$z_end)
   uncoloured<-is.na(bands$colour)
-  bands$colour[uncoloured]<-band_colours(bands$xmin[uncoloured],bands$xmax[uncoloured])
+  bands$colour[uncoloured]<-band_colours(bands$xmin[uncoloured],bands$xmax[uncoloured],palette,mode)
   # the percentage of cases between two standard deviations, kept off the curve by distances in
   # heights of their text, so that they keep their place whatever the size of the figure: in the
-  # middle, inside the curve just above its base; in the tails, just above the curve, from the
-  # line of the standard deviation outwards, where the curve only falls
+  # middle, inside the curve just above its base, in the ink that stands out from their region;
+  # in the tails, just above the curve, from the line of the standard deviation outwards, where
+  # the curve only falls
   inner<-data.frame(x=c(-1.5,-.5,.5,1.5),label=c("13.59%","34.13%","34.13%","13.59%"))
+  inner$ink<-label_ink(style$regions[c(2,1,1,2)])
   tails<-data.frame(x=c(-3.1,-2.1,2.1,3.1),label=c("0.13%","2.14%","2.14%","0.13%"),hjust=c(1,1,0,0))
   normal_plot<-ggplot()+
-    geom_ribbon(data=snd,aes(x=.data$x,ymin=0,ymax=.data$y),fill=snp_ink$wash)+
-    # the intervals between standard deviations, divided by gaps of the background colour
-    annotate("segment",x=z_score,xend=z_score,y=0,yend=density(z_score),linewidth=.6*k,colour=snp_ink$surface)+
-    geom_line(data=snd,aes(x=.data$x,y=.data$y),linewidth=.75*k,colour=snp_ink$curve,linejoin="round")+
-    annotate("text",x=inner$x,y=0,label=inner$label,vjust=-.6,size=size,colour=snp_ink$text)+
-    annotate("text",x=tails$x,y=density(tails$x),label=tails$label,hjust=tails$hjust,vjust=-.35,size=size,colour=snp_ink$text)+
+    geom_ribbon(data=regions,aes(x=.data$x,ymin=0,ymax=.data$y,group=.data$region,fill=I(.data$fill)))+
+    # the regions divided by gaps of the background colour
+    annotate("segment",x=z_score,xend=z_score,y=0,yend=density(z_score),linewidth=.6*k,colour=ink$surface)+
+    geom_line(data=snd,aes(x=.data$x,y=.data$y),linewidth=.75*k,colour=style$curve,linejoin="round")+
+    annotate("text",x=inner$x,y=0,label=inner$label,vjust=-.6,size=size,colour=inner$ink)+
+    annotate("text",x=tails$x,y=density(tails$x),label=tails$label,hjust=tails$hjust,vjust=-.35,size=size,colour=ink$text)+
     # the rules run the width of the figure, under the names of the scales too
-    annotate("segment",x=-100,xend=100,y=rows$y+.02,yend=rows$y+.02,linewidth=.3*k,colour=snp_ink$rule)
+    annotate("segment",x=-100,xend=100,y=rows$y+.02,yend=rows$y+.02,linewidth=.3*k,colour=ink$rule)
   for (i in seq_len(nrow(bands))) normal_plot<-normal_plot+
     annotation_custom(band_grob(bands$colour[i],k),xmin=bands$xmin[i],xmax=bands$xmax[i],
                       ymin=bands$y[i]-band_half_height,ymax=bands$y[i]+band_half_height)
   if (nrow(bands)>0) normal_plot<-normal_plot+
     annotate("text",x=(bands$xmin+bands$xmax)/2,y=bands$y,label=bands$label,size=size,colour=label_ink(bands$colour))
   if (nrow(ticks)>0) normal_plot<-normal_plot+
-    annotate("segment",x=ticks$z,xend=ticks$z,y=ticks$y+.02,yend=ticks$y+.0125,linewidth=.35*k,colour=snp_ink$tick)+
-    annotate("text",x=ticks$z,y=ticks$y-.005,label=ticks$label,size=size,colour=snp_ink$text)
+    annotate("segment",x=ticks$z,xend=ticks$z,y=ticks$y+.02,yend=ticks$y+.0125,linewidth=.35*k,colour=ink$tick)+
+    annotate("text",x=ticks$z,y=ticks$y-.005,label=ticks$label,size=size,colour=ink$text)
   # the names of the scales are the labels of the y axis, so that ggplot2 measures them and puts
   # them in a column of their own, a gap of their own size left of the scales, which they can
   # never run into however long they are
@@ -105,10 +130,10 @@ standard_normal_custom<-function(scales=standard_normal_scales_data(),size=3) {
     scale_y_continuous(breaks=rows$text_y,labels=rows$label)+
     theme_void()+
     theme(legend.position="none",
-          axis.text.y=element_text(hjust=0,size=size*.pt,colour=snp_ink$name,margin=margin(r=size*.pt)),
+          axis.text.y=element_text(hjust=0,size=size*.pt,colour=ink$name,margin=margin(r=size*.pt)),
           # the names of the scales indented from the left edge by the height of their text
           plot.margin=unit(c(0,0,0,size*.pt),"pt"),
-          plot.background=element_rect(fill=snp_ink$surface,colour=NA))+
+          plot.background=element_rect(fill=ink$surface,colour=NA))+
     # the span of the scales, which the rules, longer, do not widen
     coord_fixed(ratio=6,xlim=range(-4,4,scales$z,scales$z_end,na.rm=TRUE),clip="off")
   return(normal_plot)
@@ -118,13 +143,14 @@ standard_normal_custom<-function(scales=standard_normal_scales_data(),size=3) {
 ##########################################################################################
 #' @title Score scales of the standard normal chart, as a data frame
 #' @description Returns the z, T, cumulative percentage, percentile, sten, stanine, grade and
-#' IQ scales of
-#' \code{\link{standard_normal_scales}} in the format \code{\link{standard_normal_custom}}
-#' takes, so you can start from them and change, remove or add scales.
+#' IQ scales of \code{\link{standard_normal_scales}} in the format
+#' \code{\link{standard_normal_custom}} takes, so you can start from them and change, remove or
+#' add scales.
 #' @return A data frame with the columns scale, z, z_end, label and colour, and one row per
-#'   tick mark (z, T, cumulative percentage, percentile and IQ, with \code{z_end} and
-#'   \code{colour} set to \code{NA})
-#'   or per band (sten, stanine and grade, coloured by where they sit against the mean).
+#'   tick mark (z, T, cumulative percentage, percentile and IQ, with \code{z_end} set to
+#'   \code{NA}) or per band (sten, stanine and grade). \code{colour} is \code{NA} throughout, so
+#'   that the bands take the colours of the palette of the chart; set it to colour a band
+#'   yourself.
 #' @seealso \code{\link{standard_normal_custom}}
 #' @export
 #' @examples
@@ -134,7 +160,7 @@ standard_normal_custom<-function(scales=standard_normal_scales_data(),size=3) {
 standard_normal_scales_data<-function() {
   z_score<- -4:4
   ticks<-function(scale,z,label) data.frame(scale=scale,z=z,z_end=NA,label=as.character(label),colour=NA)
-  bands<-function(scale,z,z_end,label) data.frame(scale=scale,z=z,z_end=z_end,label=as.character(label),colour=band_colours(z,z_end))
+  bands<-function(scale,z,z_end,label) data.frame(scale=scale,z=z,z_end=z_end,label=as.character(label),colour=NA)
   rbind(ticks("z",z_score,z_score),
         ticks("T",z_score,z_score*10+50),
         # the percentage of cases below each standard deviation, 100 * pnorm(-3:3), to one decimal

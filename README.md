@@ -1,6 +1,6 @@
 # Standard Normal Plot
 
-Draws the standard normal curve in R with score scales lined up under it: z, T, cumulative percentage, percentile, sten, stanine, grade and IQ, so that a score on one scale can be read off on the others. The sten, stanine and grade bands are coloured by where they sit against the mean: gray at the mean, blue below it and red above it, darker the further from the mean.
+Draws the standard normal curve in R with score scales lined up under it: z, T, cumulative percentage, percentile, sten, stanine, grade and IQ, so that a score on one scale can be read off on the others. Colour shows how common a score is, in blues, reds or greens: the more cases an interval under the curve, or a band of the scales, holds, the darker it is. A diverging palette colours the bands blue below the mean and red above it instead. Each palette has a light and a dark mode.
 
 # Installation Instructions
 ## install R
@@ -27,8 +27,9 @@ install.packages(
 # Usage
 ```r
 library(snp)
-standard_normal_plot()            # for large figures, about 12 inches wide
-standard_normal_scales()          # the same chart for figures about 7 inches wide
+standard_normal_scales()                                  # for figures about 7 inches wide
+standard_normal_scales(size = 5)                          # for figures about 12 inches wide
+standard_normal_scales(palette = "greens", mode = "dark")  # blues, reds, greens or diverging; light or dark
 ggsave("snp.png", standard_normal_scales(), width = 7, height = 3.2)
 
 # your own scales: tick marks for a test score and bands for performance levels
@@ -41,7 +42,13 @@ standard_normal_custom(my_scales)
 
 # Screenshot
 
-<img src="https://raw.githubusercontent.com/sedzinfo/snp/master/snp.png" alt="The standard normal curve with the share of cases in each standard deviation band (34.13%, 13.59%, 2.14%, 0.13%), above aligned scales of z scores, T scores, cumulative percentages, percentiles, stens, stanines, grades and IQ, the sten, stanine and grade bands blue below the mean, gray at it and red above it">
+<img src="https://raw.githubusercontent.com/sedzinfo/snp/master/snp.png" alt="The standard normal curve with the share of cases in each standard deviation band (34.13%, 13.59%, 2.14%, 0.13%), above aligned scales of z scores, T scores, cumulative percentages, percentiles, stens, stanines, grades and IQ, all in blues, darker where more cases fall">
+
+# Palettes
+
+`palette` sets the colours, `"blues"` (the default), `"reds"`, `"greens"` or `"diverging"`, and `mode` the background, `"light"` (the default) or `"dark"`:
+
+<img src="https://raw.githubusercontent.com/sedzinfo/snp/master/palettes.png" alt="The chart in every palette and mode: blues, reds and greens, darker where more cases fall, and the diverging palette, with the bands blue below the mean and red above it, each on a light and on a dark background">
 
 ---
 
