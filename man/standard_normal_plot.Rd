@@ -8,7 +8,7 @@ standard_normal_plot(size = 5)
 }
 \arguments{
 \item{size}{Text size of all labels, in millimetres (ggplot2 text size). The default of 5
-suits large figures; use about 3 for figures around 7 inches wide.}
+suits large figures, about 12 inches wide; use about 3 for figures around 7 inches wide.}
 }
 \value{
 A ggplot object. Print it to draw the chart, or save it with
@@ -16,9 +16,10 @@ A ggplot object. Print it to draw the chart, or save it with
   wide as it is tall, so a figure with those proportions has no empty margins.
 }
 \description{
-Draws the standard normal curve, marked at every standard deviation with the
-percentage of cases in each interval, and lines up under it the z, T, percentile, sten,
-stanine, grade and IQ scales, so that a score on one scale can be read off on the others.
+Draws the standard normal curve, divided at every standard deviation and marked
+with the percentage of cases in each interval, and lines up under it the z, T, percentile,
+sten, stanine, grade and IQ scales, so that a score on one scale can be read off on the
+others.
 }
 \details{
 All scales are placed on the z axis:
@@ -34,15 +35,13 @@ All scales are placed on the z axis:
   \item \strong{Grade}: groups of stanines, E (1-2), D (3), C (4-6), B (7) and A (8-9).
   \item \strong{IQ}: \eqn{100 + 15z}.
 }
-The coloured sten, stanine and grade bands are drawn as thick lines, whose thickness does
-not follow the size of the figure, so in figures of ordinary size they spill over the rows
-above them. \code{\link{standard_normal_scales}} draws the same chart so that it fits any
-figure size.
+It draws the same chart as \code{\link{standard_normal_scales}}, with larger text by
+default.
 }
 \examples{
 standard_normal_plot()
 standard_normal_plot(size=3)
 }
 \seealso{
-\code{\link{standard_normal_scales}}
+\code{\link{standard_normal_scales}}, \code{\link{standard_normal_custom}}
 }

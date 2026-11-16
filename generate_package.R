@@ -4,6 +4,7 @@
 # R CMD check snp
 # R CMD Rd2pdf snp
 # R CMD build snp --resave-data
+# .rs.restartR()
 library(devtools)
 library(roxygen2)
 rm(list = ls())
@@ -25,3 +26,5 @@ pkgdown::build_site(getwd())
 system("R CMD Rd2pdf . --force --no-preview --output=snp.pdf")
 if (.Platform$OS.type == "windows") shell.exec("snp.pdf") else system("evince snp.pdf")
 system("R CMD build . --resave-data")
+
+standard_normal_plot()

@@ -15,8 +15,9 @@ standard_normal_custom(scales = standard_normal_scales_data(), size = 3)
   \item{label}{Text shown at the tick mark or inside the band.}
   \item{z_end}{Optional. Where the band ends on the z axis. Leave the column out, or use
     \code{NA}, for a tick mark.}
-  \item{colour}{Optional. Fill colour of the band. Bands without a colour are coloured from
-    light to dark along their row.}
+  \item{colour}{Optional. Fill colour of the band. Bands without a colour are coloured by
+    where they sit against the mean: gray for a band centred on the mean, blue below it and
+    red above it, darker the further from the mean.}
 }
 The default, \code{\link{standard_normal_scales_data}()}, holds the scales of
 \code{\link{standard_normal_scales}}.}
@@ -30,10 +31,15 @@ A ggplot object. Print it to draw the chart, or save it with
   makes it taller.
 }
 \description{
-Draws the standard normal curve, marked at every standard deviation with the
-percentage of cases in each interval, with the scales you describe in a data frame lined up
-under it. A scale can be a row of labelled tick marks (like T scores), a row of coloured
-bands (like stanines), or both.
+Draws the standard normal curve, divided at every standard deviation and marked
+with the percentage of cases in each interval, with the scales you describe in a data frame
+lined up under it. A scale can be a row of labelled tick marks (like T scores), a row of
+coloured bands (like stanines), or both.
+}
+\details{
+The labels inside the bands are white or near-black, whichever stands out more from
+  the colour of the band. The bands are separated by a thin gap and have rounded corners,
+  both of a fixed size in points, so they look the same whatever the size of the figure.
 }
 \examples{
 standard_normal_custom()

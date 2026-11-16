@@ -2,10 +2,10 @@
 # STANDARD NORMAL CUSTOM SCALES
 ##########################################################################################
 #' @title Plot the standard normal curve with your own score scales
-#' @description Draws the standard normal curve, marked at every standard deviation with the
-#' percentage of cases in each interval, with the scales you describe in a data frame lined up
-#' under it. A scale can be a row of labelled tick marks (like T scores), a row of coloured
-#' bands (like stanines), or both.
+#' @description Draws the standard normal curve, divided at every standard deviation and marked
+#' with the percentage of cases in each interval, with the scales you describe in a data frame
+#' lined up under it. A scale can be a row of labelled tick marks (like T scores), a row of
+#' coloured bands (like stanines), or both.
 #' @param scales A data frame with one row per tick mark or band, and the columns:
 #' \describe{
 #'   \item{scale}{Name of the scale, shown at the left of its row. Rows are drawn from top to
@@ -14,19 +14,22 @@
 #'   \item{label}{Text shown at the tick mark or inside the band.}
 #'   \item{z_end}{Optional. Where the band ends on the z axis. Leave the column out, or use
 #'     \code{NA}, for a tick mark.}
-#'   \item{colour}{Optional. Fill colour of the band. Bands without a colour are coloured from
-#'     light to dark along their row.}
+#'   \item{colour}{Optional. Fill colour of the band. Bands without a colour are coloured by
+#'     where they sit against the mean: gray for a band centred on the mean, blue below it and
+#'     red above it, darker the further from the mean.}
 #' }
 #' The default, \code{\link{standard_normal_scales_data}()}, holds the scales of
 #' \code{\link{standard_normal_scales}}.
 #' @param size Text size of all labels, in millimetres (ggplot2 text size). The default of 3
 #'   suits figures around 7 inches wide.
+#' @details The labels inside the bands are white or near-black, whichever stands out more from
+#'   the colour of the band. The bands are separated by a thin gap and have rounded corners,
+#'   both of a fixed size in points, so they look the same whatever the size of the figure.
 #' @return A ggplot object. Print it to draw the chart, or save it with
 #'   \code{ggplot2::ggsave()}. The chart keeps a fixed aspect ratio, and every scale you add
 #'   makes it taller.
 #' @seealso \code{\link{standard_normal_scales_data}}, \code{\link{standard_normal_scales}}
 #' @import ggplot2
-#' @importFrom grDevices hcl.colors
 #' @export
 #' @examples
 #' standard_normal_custom()
@@ -48,12 +51,16 @@ standard_normal_custom<-function(scales=standard_normal_scales_data(),size=3) {
     stop("the z and z_end columns of scales must be numeric",call.=FALSE)
   scales<-data.frame(scale=as.character(scales$scale),z=scales$z,z_end=as.numeric(scales$z_end),
                      label=as.character(scales$label),colour=as.character(scales$colour))
+  density<-function(x) exp(-x^2/2)/sqrt(2*pi)
   z_score<- -4:4
-  snd<-data.frame(x=seq(-4.5,4.5,.01))
-  snd$y<-exp(-snd$x^2/2)/sqrt(2*pi)
-  linecolor<-"gray50"
-  # one row per scale, .04 apart, with a separator .02 above each row line;
-  # tick labels sit under their tick marks and bands fill 85% of their row, so rows never touch
+  # the curve over the span of the scales, where it meets the bottom of its wash
+  snd<-data.frame(x=seq(-4,4,.01))
+  snd$y<-density(snd$x)
+  # distances that hold text grow with it
+  k<-size/3
+  # one row per scale, .04 apart, with a hairline .02 above each row, the first included, which
+  # separates the scales from the curve; tick labels sit under their tick marks and bands fill 85% of
+  # their row, so rows never touch
   rows<-data.frame(label=unique(scales$scale))
   rows$y<- -.01-.04*seq_len(nrow(rows))
   scales$y<-rows$y[match(scales$scale,rows$label)]
@@ -63,37 +70,36 @@ standard_normal_custom<-function(scales=standard_normal_scales_data(),size=3) {
   band_half_height<-.017
   bands$xmin<-pmin(bands$z,bands$z_end)
   bands$xmax<-pmax(bands$z,bands$z_end)
-  for (s in unique(bands$scale)) {
-    i<-which(bands$scale==s&is.na(bands$colour))
-    if (length(i)>0) bands$colour[i]<-hcl.colors(length(i),palette="Heat 2",alpha=1,rev=TRUE,fixup=TRUE)[rank(bands$xmin[i],ties.method="first")]
-  }
+  uncoloured<-is.na(bands$colour)
+  bands$colour[uncoloured]<-band_colours(bands$xmin[uncoloured],bands$xmax[uncoloured])
+  # the percentage of cases between two standard deviations: inside the curve where it is tall
+  # enough, and just above the curve in the tails
+  percent<-data.frame(x=c(-3.5,-2.5,-1.5,-.5,.5,1.5,2.5,3.5),
+                      label=c("0.13%","2.14%","13.59%","34.13%","34.13%","13.59%","2.14%","0.13%"))
+  percent$y<-ifelse(abs(percent$x)<2,.035*k,density(abs(percent$x)-.3*k)+.018*k)
   normal_plot<-ggplot()+
-    geom_line(data=snd,aes(x=.data$x,y=.data$y),linewidth=2,colour=linecolor)+
-    annotate("segment",x=z_score,xend=z_score,y=-.01,yend=exp(-z_score^2/2)/sqrt(2*pi),linewidth=1,colour=linecolor)+
-    geom_hline(yintercept=-.01,linewidth=1,colour=linecolor)+
-    annotate("text",x=c(-3:4)-.5,y=.01,label=c("0.13%","2.14%","13.59%","34.13%","34.13%","13.59%","2.14%","0.13%"),size=size)
-  if (nrow(bands)>0) normal_plot<-normal_plot+
-    annotate("rect",xmin=bands$xmin,xmax=bands$xmax,ymin=bands$y-band_half_height,ymax=bands$y+band_half_height,fill=bands$colour)+
-    annotate("text",x=(bands$xmin+bands$xmax)/2,y=bands$y,label=bands$label,size=size)
-  if (nrow(ticks)>0) normal_plot<-normal_plot+
-    annotate("segment",x=ticks$z,xend=ticks$z,y=ticks$y+.02,yend=ticks$y+.01,alpha=.5)+
-    annotate("text",x=ticks$z,y=ticks$y-.005,label=ticks$label,size=size)
+    geom_ribbon(data=snd,aes(x=.data$x,ymin=0,ymax=.data$y),fill=snp_ink$wash)+
+    # the intervals between standard deviations, divided by gaps of the background colour
+    annotate("segment",x=z_score,xend=z_score,y=0,yend=density(z_score),linewidth=.6,colour=snp_ink$surface)+
+    geom_line(data=snd,aes(x=.data$x,y=.data$y),linewidth=.75,colour=snp_ink$curve,linejoin="round")+
+    annotate("text",x=percent$x,y=percent$y,label=percent$label,size=size,colour=snp_ink$text)
   normal_plot<-normal_plot+
-    annotate("text",x=min(-4,scales$z,scales$z_end,na.rm=TRUE)-2,y=rows$text_y,label=rows$label,hjust=0,size=size)+
-    geom_hline(yintercept=rows$y+.02,alpha=.5,linewidth=.1,colour=linecolor)+
-    theme_bw(base_size=size)+
-    labs(x="",y="")+
+    geom_hline(yintercept=rows$y+.02,linewidth=.3,colour=snp_ink$rule)
+  for (i in seq_len(nrow(bands))) normal_plot<-normal_plot+
+    annotation_custom(band_grob(bands$colour[i]),xmin=bands$xmin[i],xmax=bands$xmax[i],
+                      ymin=bands$y[i]-band_half_height,ymax=bands$y[i]+band_half_height)
+  if (nrow(bands)>0) normal_plot<-normal_plot+
+    annotate("text",x=(bands$xmin+bands$xmax)/2,y=bands$y,label=bands$label,size=size,colour=label_ink(bands$colour))
+  if (nrow(ticks)>0) normal_plot<-normal_plot+
+    annotate("segment",x=ticks$z,xend=ticks$z,y=ticks$y+.02,yend=ticks$y+.0125,linewidth=.35,colour=snp_ink$tick)+
+    annotate("text",x=ticks$z,y=ticks$y-.005,label=ticks$label,size=size,colour=snp_ink$text)
+  normal_plot<-normal_plot+
+    annotate("text",x=min(-4,scales$z,scales$z_end,na.rm=TRUE)-2,y=rows$text_y,label=rows$label,
+             hjust=0,size=size,colour=snp_ink$name)+
+    theme_void()+
     theme(legend.position="none",
-          panel.grid.minor=element_blank(),
-          panel.grid=element_blank(),
-          axis.text.y=element_blank(),
-          axis.text.x=element_blank(),
-          axis.ticks.y=element_blank(),
-          axis.ticks.x=element_blank(),
-          axis.title.x=element_blank(),
           plot.margin=unit(c(0,0,0,0),"pt"),
-          plot.background=element_blank(),
-          panel.border=element_blank())+
+          plot.background=element_rect(fill=snp_ink$surface,colour=NA))+
     coord_fixed(ratio=6)
   return(normal_plot)
 }
@@ -106,9 +112,8 @@ standard_normal_custom<-function(scales=standard_normal_scales_data(),size=3) {
 #' takes, so you can start from them and change, remove or add scales.
 #' @return A data frame with the columns scale, z, z_end, label and colour, and one row per
 #'   tick mark (z, T, percentile and IQ, with \code{z_end} and \code{colour} set to \code{NA})
-#'   or per band (sten, stanine and grade).
+#'   or per band (sten, stanine and grade, coloured by where they sit against the mean).
 #' @seealso \code{\link{standard_normal_custom}}
-#' @importFrom grDevices hcl.colors
 #' @export
 #' @examples
 #' scales<-standard_normal_scales_data()
@@ -116,17 +121,13 @@ standard_normal_custom<-function(scales=standard_normal_scales_data(),size=3) {
 #' unique(scales$scale)
 standard_normal_scales_data<-function() {
   z_score<- -4:4
-  colours<-hcl.colors(18,palette="Heat 2",alpha=1,rev=TRUE,fixup=TRUE)
   ticks<-function(scale,z,label) data.frame(scale=scale,z=z,z_end=NA,label=as.character(label),colour=NA)
-  bands<-function(scale,z,z_end,label,colour) data.frame(scale=scale,z=z,z_end=z_end,label=as.character(label),colour=colour)
+  bands<-function(scale,z,z_end,label) data.frame(scale=scale,z=z,z_end=z_end,label=as.character(label),colour=band_colours(z,z_end))
   rbind(ticks("z",z_score,z_score),
         ticks("T",z_score,z_score*10+50),
         ticks("PERCENTILE",c(-2.326,-1.645,-1.282,-0.675,0,0.675,1.282,1.645,2.326),c(1,5,10,25,50,75,90,95,99)),
-        bands("STEN",c(-4,-2,-1.5,-1,-.5,0,.5,1,1.5,2),c(-2,-1.5,-1,-.5,0,.5,1,1.5,2,4),1:10,
-              colours[c(1,2,4,6,8,11,13,15,17,18)]),
-        bands("STANINE",c(-4,-1.75,-1.25,-.75,-.25,.25,.75,1.25,1.75),c(-1.75,-1.25,-.75,-.25,.25,.75,1.25,1.75,4),1:9,
-              colours[c(1,3,5,7,9,12,14,16,18)]),
-        bands("GRADE",c(-4,-1.25,-.75,.75,1.25),c(-1.25,-.75,.75,1.25,4),c("E","D","C","B","A"),
-              colours[c(1,5,9,14,18)]),
+        bands("STEN",c(-4,-2,-1.5,-1,-.5,0,.5,1,1.5,2),c(-2,-1.5,-1,-.5,0,.5,1,1.5,2,4),1:10),
+        bands("STANINE",c(-4,-1.75,-1.25,-.75,-.25,.25,.75,1.25,1.75),c(-1.75,-1.25,-.75,-.25,.25,.75,1.25,1.75,4),1:9),
+        bands("GRADE",c(-4,-1.25,-.75,.75,1.25),c(-1.25,-.75,.75,1.25,4),c("E","D","C","B","A")),
         ticks("IQ",z_score,z_score*15+100))
 }

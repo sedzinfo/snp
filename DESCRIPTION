@@ -6,6 +6,7 @@ Authors@R: person("Dimitrios", "Zacharatos", , "dimitrios@psycholate.com", role 
 Author: Dimitrios Zacharatos [aut, cre]
 Maintainer: Dimitrios Zacharatos <dimitrios@psycholate.com>
 Depends: ggplot2
+Imports: grDevices, grid
 Description: Draws the standard normal curve with score scales lined up under it: z, T,
     percentile, sten, stanine, grade and IQ, or scales defined in a data frame, each shown
     as labelled tick marks or coloured bands.

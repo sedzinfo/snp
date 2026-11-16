@@ -17,12 +17,13 @@ A ggplot object. Print it to draw the chart, or save it with
   wide as it is tall, so a figure with those proportions has no empty margins.
 }
 \description{
-Draws the chart of \code{\link{standard_normal_plot}}: the standard normal
-curve, marked at every standard deviation with the percentage of cases in each interval,
-with the z, T, percentile, sten, stanine, grade and IQ scales lined up under it, so that a
-score on one scale can be read off on the others. Here the coloured bands are sized in plot
-units, so the rows never overlap whatever the size of the figure, each element is drawn
-once, and no ggplot2 warnings are raised.
+Draws the standard normal curve, divided at every standard deviation and marked
+with the percentage of cases in each interval, with the z, T, percentile, sten, stanine,
+grade and IQ scales lined up under it, so that a score on one scale can be read off on the
+others. The sten, stanine and grade bands are coloured by where they sit against the mean:
+gray for the band centred on the mean, blue below it and red above it, darker the further
+from the mean. The bands are sized in plot units, so the rows never overlap whatever the
+size of the figure.
 }
 \details{
 All scales are placed on the z axis:
@@ -38,6 +39,8 @@ All scales are placed on the z axis:
   \item \strong{Grade}: groups of stanines, E (1-2), D (3), C (4-6), B (7) and A (8-9).
   \item \strong{IQ}: \eqn{100 + 15z}.
 }
+The chart is \code{\link{standard_normal_custom}} drawn with
+\code{\link{standard_normal_scales_data}()}: start from those to change the scales.
 }
 \examples{
 standard_normal_scales()
@@ -46,5 +49,5 @@ standard_normal_scales(size=4)
 ggsave(file.path(tempdir(),"standard_normal_scales.png"),standard_normal_scales(),width=7,height=2.8)
 }
 \seealso{
-\code{\link{standard_normal_plot}}
+\code{\link{standard_normal_plot}}, \code{\link{standard_normal_custom}}
 }
