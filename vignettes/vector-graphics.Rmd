@@ -1,0 +1,149 @@
+---
+title: "Saving as vector graphics"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Saving as vector graphics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 7, fig.height = 3.2,
+                      out.width = "100%")
+```
+
+A vector graphic stores the chart as shapes and text instead of pixels, so it stays sharp however
+far it is zoomed in and however large it is printed. `plot_normal()` returns a ggplot object, so
+`ggplot2::ggsave()` saves it in any of the vector formats below: the file extension names the
+format, and `device` chooses how the file is written.
+
+```{r setup}
+library(snp)
+```
+
+The chart below is itself an SVG: zoom into the page and it stays sharp.
+
+```{r demo, dev = "svg", fig.ext = "svg"}
+plot_normal()
+```
+
+## Which format
+
+| Where the chart goes | Format | `device` |
+|---|---|---|
+| LaTeX, journals, printing | PDF | `cairo_pdf` |
+| Web pages, Markdown, Word and PowerPoint | SVG | `svg` |
+| Inkscape or Illustrator, to edit the text | SVG | `svglite::svglite` |
+| Older versions of Word and PowerPoint | EMF | `devEMF::emf` |
+| Journals that ask for EPS | EPS | `cairo_ps` |
+
+## Size
+
+`width` and `height` set the size of the figure, in inches unless `units` says otherwise. The chart
+keeps its proportions, about 2.2 times as wide as it is tall with the standard scales, so a figure
+with those proportions has no empty margins:
+
+```{r size, eval = FALSE}
+ggsave("normal.pdf", plot_normal(), width = 7, height = 3.2, device = cairo_pdf)
+ggsave("normal.pdf", plot_normal(), width = 17.8, height = 8.2, units = "cm", device = cairo_pdf)
+```
+
+A vector graphic scales as a whole: shrink it in a document and its text shrinks with it. So save
+it at the size it will be shown, and set `size`, the text size in millimetres, for that width. The
+default of 3, about 8.5 points, suits a width of about 7 inches (17.8 cm); for other widths, scale
+it in proportion, `size = 3 * width / 7` with the width in inches. A poster or a wide slide:
+
+```{r wide, eval = FALSE}
+ggsave("normal_wide.pdf", plot_normal(size = 5), width = 12, height = 5.6, device = cairo_pdf)
+```
+
+Below about 6 inches (15 cm) the text becomes small for print, so the chart reads best across the
+full width of a page.
+
+Every scale adds a row, and long scale names take width from the chart, so the right height
+depends on both. For `n` scales it is about `width * (0.26 + 0.025 * n)` when the longest name is as
+long as those of the standard scales, and about `width * (0.30 + 0.028 * n)` when every name is a
+letter or two. Empty background at the sides means the figure is too short, and above and below,
+too tall. Three scales with short names:
+
+```{r height, eval = FALSE}
+scales <- standard_normal_scales_data()
+scales <- scales[scales$scale %in% c("z", "T", "IQ"), ]
+n <- length(unique(scales$scale))
+ggsave("normal_3.pdf", plot_normal(scales), width = 7, height = 7 * (0.30 + 0.028 * n),
+       device = cairo_pdf)
+```
+
+## PDF
+
+For LaTeX, journals and printing. Use `device = cairo_pdf`: it embeds the font in the file, so the
+chart looks the same on every computer and printer, and journals that require embedded fonts accept
+it. Without `device`, `ggsave()` uses R's `pdf()` device, which does not embed the font: it names
+Helvetica and leaves the program that opens the file to supply it.
+
+```{r pdf, eval = FALSE}
+ggsave("normal.pdf", plot_normal(), width = 7, height = 3.2, device = cairo_pdf)
+```
+
+In LaTeX, include it at the size it was saved, so that its text keeps its size:
+
+```latex
+\includegraphics{normal.pdf}
+```
+
+Several charts go into one PDF, one per page, by opening the device yourself and printing each
+chart:
+
+```{r pages, eval = FALSE}
+cairo_pdf("palettes.pdf", width = 7, height = 3.2, onefile = TRUE)
+for (palette in c("blues", "reds", "greens", "diverging")) print(plot_normal(palette = palette))
+dev.off()
+```
+
+## SVG
+
+For web pages, Markdown files (GitHub shows an SVG in a README like any image) and Word and
+PowerPoint in Microsoft 365, which insert SVG files as pictures. There are two ways to write one.
+
+`device = svg`, R's own SVG device, draws every letter as an outline. The chart looks exactly the
+same wherever it is opened and no other package is needed, but its text cannot be selected or
+edited:
+
+```{r svg, eval = FALSE}
+ggsave("normal.svg", plot_normal(), width = 7, height = 3.2, device = svg)
+```
+
+The svglite package keeps the text as text, so it can be selected, searched and edited in Inkscape
+or Illustrator. It is what `ggsave()` uses for a `.svg` file when `device` is left out, and it has
+to be installed first:
+
+```{r svglite, eval = FALSE}
+install.packages("svglite")
+ggsave("normal.svg", plot_normal(), width = 7, height = 3.2)
+```
+
+The program that opens the file draws the text in Arial, so on a computer without Arial another font
+takes its place and the labels may shift slightly.
+
+## EMF
+
+For older versions of Word and PowerPoint, which take Windows metafiles but not SVG. The devEMF
+package writes them on any system:
+
+```{r emf, eval = FALSE}
+install.packages("devEMF")
+ggsave("normal.emf", plot_normal(), width = 7, height = 3.2, device = devEMF::emf)
+```
+
+## EPS
+
+Some journals still ask for EPS. Use `device = cairo_ps`, which embeds the font:
+
+```{r eps, eval = FALSE}
+ggsave("normal.eps", plot_normal(), width = 7, height = 3.2, device = cairo_ps)
+```
+
+EPS has no transparency. The chart itself has none, but a layer added with `alpha`, such as the
+shaded tails in the [Examples](examples.html) article, is turned into an image inside the file by
+`cairo_ps` and left out altogether by `ggsave()`'s default EPS device. Save such charts as PDF or
+SVG instead.

@@ -40,7 +40,7 @@ plot_normal(my_scales)
 
 `standard_normal_scales_data()` returns the standard scales as a data frame, to start from when changing them.
 
-More examples, from palettes and sizes to scales of your own, are in the [Examples](https://sedzinfo.github.io/snp/articles/examples.html) article.
+More examples, from palettes and sizes to scales of your own, are in the [Examples](https://sedzinfo.github.io/snp/articles/examples.html) article, and [Saving as vector graphics](https://sedzinfo.github.io/snp/articles/vector-graphics.html) shows how to save the chart as PDF, SVG, EMF or EPS.
 
 # Screenshot
 

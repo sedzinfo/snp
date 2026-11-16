@@ -78,7 +78,7 @@ size on a small figure is too small on a large one. `size` is the text size in m
 default of 3 suits figures about 7 inches wide, and about 5 suits figures about 12 inches wide.
 The lines, the gaps between the bands and their rounded corners grow with it.
 
-```{r size, fig.width = 12, fig.height = 5.5}
+```{r size, fig.width = 12, fig.height = 5.6}
 plot_normal(size = 5)
 ```
 
@@ -89,9 +89,10 @@ the chart has no empty margins:
 
 ```{r save, eval = FALSE}
 ggsave("normal.png", plot_normal(), width = 7, height = 3.2)
-ggsave("normal_large.png", plot_normal(size = 5), width = 12, height = 5.5)
-ggsave("normal.pdf", plot_normal(palette = "diverging"), width = 7, height = 3.2)
 ```
+
+For print, papers and slides, save it as vector graphics instead, which stay sharp at any size: PDF,
+SVG, EMF or EPS, all in [Saving as vector graphics](vector-graphics.html).
 
 ## The scales as data
 
@@ -119,13 +120,13 @@ you add makes the chart taller, so the figures below change height with the numb
 
 Keep the rows of the scales you want:
 
-```{r keep, fig.height = 2.2}
+```{r keep, fig.height = 2.7}
 plot_normal(scales[scales$scale %in% c("z", "T", "IQ"), ])
 ```
 
 Sort the rows to change the order of the scales:
 
-```{r reorder, fig.height = 2.4}
+```{r reorder, fig.height = 2.6}
 wanted <- c("IQ", "PERCENTILE", "STANINE", "z")
 reordered <- scales[scales$scale %in% wanted, ]
 reordered <- reordered[order(match(reordered$scale, wanted)), ]
@@ -134,7 +135,7 @@ plot_normal(reordered)
 
 Rename a scale by changing its `scale` column:
 
-```{r rename}
+```{r rename, fig.height = 3.3}
 renamed <- scales
 renamed$scale[renamed$scale == "z"] <- "Z SCORE"
 renamed$scale[renamed$scale == "CUMULATIVE %"] <- "% BELOW"
@@ -164,7 +165,7 @@ Tick marks need not sit at whole standard deviations. Normal curve equivalents (
 of 50 and a standard deviation of 21.06, and are usually labelled at round values, each placed at
 its own z. NCE 1, 50 and 99 fall on the 1st, 50th and 99th percentiles:
 
-```{r nce, fig.height = 2.2}
+```{r nce, fig.height = 2.4}
 nce <- c(1, 10, 25, 50, 75, 90, 99)
 nce_scale <- data.frame(scale = "NCE", z = (nce - 50) / 21.06, z_end = NA, label = nce, colour = NA)
 plot_normal(rbind(scales[scales$scale %in% c("z", "PERCENTILE"), ], nce_scale))
@@ -175,7 +176,7 @@ plot_normal(rbind(scales[scales$scale %in% c("z", "PERCENTILE"), ], nce_scale))
 A band runs from `z` to `z_end`. `qnorm()` gives the z at which a percentage of cases falls
 below, so it cuts bands that hold equal shares of cases, such as quartiles and deciles:
 
-```{r quantiles, fig.height = 2.2}
+```{r quantiles, fig.height = 2.4}
 quantile_bands <- function(name, n) {
   cuts <- qnorm(seq_len(n - 1) / n)
   data.frame(scale = name, z = c(-4, cuts), z_end = c(cuts, 4), label = seq_len(n), colour = NA)
@@ -188,7 +189,7 @@ plot_normal(rbind(scales[scales$scale == "PERCENTILE", ],
 Bands in the units of another scale are placed by converting their limits to z, here IQ ranges
 one standard deviation wide:
 
-```{r iq-ranges, fig.height = 2.2}
+```{r iq-ranges, fig.height = 2.4}
 iq <- c(40, 70, 85, 115, 130, 160)
 iq_ranges <- data.frame(scale = "IQ RANGE", z = (head(iq, -1) - 100) / 15, z_end = (iq[-1] - 100) / 15,
                         label = c("<70", "70-84", "85-114", "115-129", "130+"), colour = NA)
@@ -197,7 +198,7 @@ plot_normal(rbind(scales[scales$scale %in% c("PERCENTILE", "IQ"), ], iq_ranges))
 
 Bands need not cover the whole axis; a row can hold only the bands it needs:
 
-```{r gaps, fig.height = 2.2}
+```{r gaps, fig.height = 2.4}
 extremes <- data.frame(scale = "EXTREMES", z = c(-4, 2), z_end = c(-2, 4),
                        label = c("Very low", "Very high"), colour = NA)
 plot_normal(rbind(scales[scales$scale %in% c("z", "PERCENTILE"), ], extremes))
@@ -208,7 +209,7 @@ plot_normal(rbind(scales[scales$scale %in% c("z", "PERCENTILE"), ], extremes))
 A band with a `colour` keeps it whatever the palette; the labels on it turn white or near-black,
 whichever stands out more. A pass mark one standard deviation below the mean:
 
-```{r decision, fig.height = 2.2}
+```{r decision, fig.height = 2.4}
 decision <- data.frame(scale = "DECISION", z = c(-4, -1), z_end = c(-1, 4),
                        label = c("Fail", "Pass"), colour = c("#c74845", "#31902c"))
 plot_normal(rbind(scales[scales$scale %in% c("z", "T"), ], decision))
@@ -217,7 +218,7 @@ plot_normal(rbind(scales[scales$scale %in% c("z", "T"), ], decision))
 Bands with and without a colour can share a row, here stanines 7 to 9 picked out and the rest left
 to the palette:
 
-```{r highlight, fig.height = 2.0}
+```{r highlight, fig.height = 2.3}
 stanine <- scales[scales$scale == "STANINE", ]
 stanine$colour[stanine$label %in% 7:9] <- "#c74845"
 plot_normal(rbind(scales[scales$scale == "z", ], stanine))
@@ -229,7 +230,7 @@ The scales need not include any of the standard ones. A test with raw scores of 
 standard deviation 5, and four performance levels cut at raw scores of 15, 22 and 30; the `colour`
 column is optional and left out:
 
-```{r own, fig.height = 2.0}
+```{r own, fig.height = 2.2}
 raw <- seq(10, 40, 5)
 cuts <- (c(15, 22, 30) - 24) / 5
 test <- rbind(data.frame(scale = "RAW SCORE", z = (raw - 24) / 5, z_end = NA, label = raw),
