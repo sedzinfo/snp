@@ -121,7 +121,8 @@ Each row is a tick mark or a band:
 - `colour`: the fill of the band, or `NA` for the colours of the palette.
 
 Change the data frame and pass it to `plot_normal()` as its first argument, `scales`. Every scale
-you add makes the chart taller, so the figures below change height with the number of scales.
+you add makes the chart taller, so the figures below change height with the number of scales;
+`plot_normal_height()` gives the height that fits a chart at any width.
 
 ## Choosing scales
 

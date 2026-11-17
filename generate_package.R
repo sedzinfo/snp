@@ -27,6 +27,6 @@ system("R CMD Rd2pdf . --force --no-preview --output=snp.pdf")
 if (.Platform$OS.type == "windows") shell.exec("snp.pdf") else system("evince snp.pdf")
 system("R CMD build . --resave-data")
 
-plot_normal(size=5)
+plot_normal(size=7)
 
 standard_normal_scales_data()

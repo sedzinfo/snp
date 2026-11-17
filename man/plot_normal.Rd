@@ -46,7 +46,8 @@ mode are brighter instead, so that they still stand out from the background.}
 A ggplot object. Print it to draw the chart, or save it with
   \code{ggplot2::ggsave()}. The chart keeps a fixed aspect ratio, and every scale you add
   makes it taller. With the default scales it is about 2.2 times as wide as it is tall, so a
-  figure with those proportions, such as 7 by 3.2 inches, has no empty margins.
+  figure with those proportions, such as 7 by 3.2 inches, has no empty margins;
+  \code{\link{plot_normal_height}} gives the height that fits any chart exactly.
 }
 \description{
 Draws the standard normal curve, divided at every standard deviation and marked
@@ -83,5 +84,5 @@ scales<-rbind(scales,data.frame(scale="SCALED",z=-3:3,z_end=NA,label=seq(1,19,3)
 plot_normal(scales)
 }
 \seealso{
-\code{\link{standard_normal_scales_data}}
+\code{\link{standard_normal_scales_data}}, \code{\link{plot_normal_height}}
 }

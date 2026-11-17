@@ -22,6 +22,11 @@
 
   `standard_normal_scales_data()` keeps its name.
 
+## New
+
+* `plot_normal_height()` returns the height of a figure that a chart fills exactly at a given
+  width, in inches, centimetres or millimetres, to save it with `ggsave()` without empty margins.
+
 ## The chart
 
 * The percentages under the curve are on one line, each over its interval.

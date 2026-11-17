@@ -82,3 +82,25 @@ test_that("bands mirrored about the mean take the same colour, except in the div
 test_that("labels on a fill are white or near-black, whichever stands out more", {
   expect_equal(label_ink(c("#ffffff", "#000000")), c(snp_inks$light$text, "#ffffff"))
 })
+
+test_that("plot_normal_height() gives the height that fits the chart", {
+  expect_equal(plot_normal_height(plot_normal(), 7), 3.2, tolerance = 0.03)
+  expect_equal(plot_normal_height(plot_normal(), 17.78, units = "cm"),
+               plot_normal_height(plot_normal(), 7) * 2.54)
+  scales <- standard_normal_scales_data()
+  fewer <- plot_normal(scales[scales$scale %in% c("z", "T", "IQ"), ])
+  expect_lt(plot_normal_height(fewer, 7), plot_normal_height(plot_normal(), 7))
+  # the device that was current stays current
+  grDevices::pdf(NULL)
+  on.exit(grDevices::dev.off())
+  before <- grDevices::dev.cur()
+  plot_normal_height(plot_normal(), 7)
+  expect_equal(grDevices::dev.cur(), before)
+})
+
+test_that("plot_normal_height() rejects what it cannot measure", {
+  expect_error(plot_normal_height(plot_normal(), -1), "positive")
+  expect_error(plot_normal_height(plot_normal(), 0.5), "too narrow")
+  expect_error(plot_normal_height(ggplot2::ggplot(), 7), "fixed aspect ratio")
+  expect_error(plot_normal_height(plot_normal(), 7, units = "pt"))
+})

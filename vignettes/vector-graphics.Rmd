@@ -60,18 +60,19 @@ ggsave("normal_wide.pdf", plot_normal(size = 5), width = 12, height = 5.6, devic
 Below about 6 inches (15 cm) the text becomes small for print, so the chart reads best across the
 full width of a page.
 
-Every scale adds a row, and long scale names take width from the chart, so the right height
-depends on both. For `n` scales it is about `width * (0.26 + 0.025 * n)` when the longest name is as
-long as those of the standard scales, and about `width * (0.30 + 0.028 * n)` when every name is a
-letter or two. Empty background at the sides means the figure is too short, and above and below,
-too tall. Three scales with short names:
+Every scale adds a row, and long scale names take width from the chart, so the height that fits
+depends on both. `plot_normal_height()` works it out for any chart at the width you give, in inches,
+centimetres or millimetres:
 
-```{r height, eval = FALSE}
+```{r height}
 scales <- standard_normal_scales_data()
-scales <- scales[scales$scale %in% c("z", "T", "IQ"), ]
-n <- length(unique(scales$scale))
-ggsave("normal_3.pdf", plot_normal(scales), width = 7, height = 7 * (0.30 + 0.028 * n),
-       device = cairo_pdf)
+p <- plot_normal(scales[scales$scale %in% c("z", "T", "IQ"), ])
+plot_normal_height(p, 7)
+plot_normal_height(p, 17.8, units = "cm")
+```
+
+```{r height-save, eval = FALSE}
+ggsave("normal_3.pdf", p, width = 7, height = plot_normal_height(p, 7), device = cairo_pdf)
 ```
 
 ## PDF

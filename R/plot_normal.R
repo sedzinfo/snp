@@ -43,8 +43,9 @@
 #' @return A ggplot object. Print it to draw the chart, or save it with
 #'   \code{ggplot2::ggsave()}. The chart keeps a fixed aspect ratio, and every scale you add
 #'   makes it taller. With the default scales it is about 2.2 times as wide as it is tall, so a
-#'   figure with those proportions, such as 7 by 3.2 inches, has no empty margins.
-#' @seealso \code{\link{standard_normal_scales_data}}
+#'   figure with those proportions, such as 7 by 3.2 inches, has no empty margins;
+#'   \code{\link{plot_normal_height}} gives the height that fits any chart exactly.
+#' @seealso \code{\link{standard_normal_scales_data}}, \code{\link{plot_normal_height}}
 #' @import ggplot2
 #' @importFrom stats dnorm
 #' @export
@@ -145,6 +146,56 @@ plot_normal<-function(scales=standard_normal_scales_data(),size=3,
     # the span of the scales, which the rules, longer, do not widen
     coord_fixed(ratio=6,xlim=range(-4,4,scales$z,scales$z_end,na.rm=TRUE),clip="off")
   normal_plot
+}
+##########################################################################################
+# PLOT NORMAL HEIGHT
+##########################################################################################
+#' @title The height that fits a chart
+#' @description Returns the height of a figure that a chart of \code{\link{plot_normal}} fills
+#' exactly at a given width, with no empty margins, to save it with \code{ggplot2::ggsave()}.
+#' @param plot A chart of \code{\link{plot_normal}}, or any ggplot with a fixed aspect ratio.
+#' @param width The width of the figure.
+#' @param units The units of \code{width} and of the height returned: \code{"in"}, \code{"cm"}
+#'   or \code{"mm"}.
+#' @details The chart keeps a fixed aspect ratio, but the column of the names of the scales, the
+#'   text and the margins keep their size whatever the size of the figure, so the height that fits
+#'   depends on the width, on the number of scales and on the length of their names. The function
+#'   lays the chart out at the given width, measuring its text as a PDF does, and adds up the
+#'   heights. Other graphics devices measure text a little differently, which can leave a margin
+#'   of a fraction of a millimetre.
+#' @return The height, a number in \code{units}.
+#' @seealso \code{\link{plot_normal}}
+#' @export
+#' @examples
+#' plot_normal_height(plot_normal(), 7)
+#' plot_normal_height(plot_normal(), 17.8, units = "cm")
+#' # fewer scales, a shorter chart
+#' scales <- standard_normal_scales_data()
+#' p <- plot_normal(scales[scales$scale %in% c("z", "T", "IQ"), ])
+#' plot_normal_height(p, 7)
+#' ggsave(file.path(tempdir(), "normal.pdf"), p, width = 7, height = plot_normal_height(p, 7))
+plot_normal_height<-function(plot=plot_normal(),width=7,units=c("in","cm","mm")) {
+  units<-match.arg(units)
+  if (!is.numeric(width)||length(width)!=1||is.na(width)||width<=0)
+    stop("width must be a single positive number",call.=FALSE)
+  per_inch<-c("in"=1,"cm"=2.54,"mm"=25.4)[[units]]
+  # the chart laid out in a device of its own, closed afterwards, leaving the current device current
+  current<-grDevices::dev.cur()
+  grDevices::pdf(NULL,width=width/per_inch,height=width/per_inch)
+  on.exit({grDevices::dev.off(); if (current>1) grDevices::dev.set(current)},add=TRUE)
+  layout<-ggplotGrob(plot)
+  if (!isTRUE(layout$respect))
+    stop("plot must have a fixed aspect ratio, as the charts of plot_normal() do",call.=FALSE)
+  # the panel is sized in null units, which share what the fixed parts leave over in proportion:
+  # its height is its width times its aspect ratio
+  fixed_w<-grid::unitType(layout$widths)!="null"
+  fixed_h<-grid::unitType(layout$heights)!="null"
+  aspect<-sum(as.numeric(layout$heights[!fixed_h]))/sum(as.numeric(layout$widths[!fixed_w]))
+  fixed_width<-sum(grid::convertWidth(layout$widths[fixed_w],"in",valueOnly=TRUE))
+  fixed_height<-sum(grid::convertHeight(layout$heights[fixed_h],"in",valueOnly=TRUE))
+  if (width/per_inch<=fixed_width)
+    stop("width is too narrow for the names of the scales and the margins of the chart",call.=FALSE)
+  (fixed_height+(width/per_inch-fixed_width)*aspect)*per_inch
 }
 ##########################################################################################
 # STANDARD NORMAL SCALES DATA
