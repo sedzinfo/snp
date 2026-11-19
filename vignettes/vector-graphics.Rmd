@@ -1,5 +1,6 @@
 ---
 title: "Saving as vector graphics"
+description: "Save the standard normal chart of snp as a vector graphic, in PDF, SVG, EMF or EPS, so it stays sharp at any size and in print."
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Saving as vector graphics}

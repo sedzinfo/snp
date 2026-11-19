@@ -1,5 +1,6 @@
 ---
 title: "Examples"
+description: "Draw the standard normal curve with z, T, percentile, sten, stanine, grade and IQ scales under it, and change its palette, dark mode, text size and scales."
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Examples}
