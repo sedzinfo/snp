@@ -2,7 +2,7 @@ name: Build package tarball
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
     paths:                                        # only when the package itself changes
       - "R/**"
       - "man/**"
@@ -61,5 +61,5 @@ jobs:
           else                                  # first build, or the release was deleted
             gh release create latest "${files[@]}" \
               --target "$GITHUB_SHA" --title "Latest build" \
-              --notes "Built automatically from master: the source tarball and the PDF manual."
+              --notes "Built automatically from main: the source tarball and the PDF manual."
           fi
