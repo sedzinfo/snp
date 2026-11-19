@@ -15,11 +15,11 @@ library(devtools)
 install_github("sedzinfo/snp")
 ```
 
-Without devtools, install the source tarball of the [latest release](https://github.com/sedzinfo/snp/releases/tag/latest), which is rebuilt from `master` on every change, together with the PDF manual:
+Without devtools, install the source tarball of the [latest release](https://github.com/sedzinfo/snp/releases/tag/latest), which is rebuilt from `main` on every change, together with the PDF manual:
 
 ```r
 install.packages(
-  "https://github.com/sedzinfo/snp/releases/download/latest/snp_0.0.0.9000.tar.gz",
+  "https://github.com/sedzinfo/snp/releases/download/latest/snp_0.1.0.tar.gz",
   repos = NULL, type = "source"
 )
 ```

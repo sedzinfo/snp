@@ -1,4 +1,4 @@
-# snp 0.0.0.9000
+# snp 0.1.0
 
 ## Breaking changes
 
