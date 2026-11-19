@@ -1,12 +1,13 @@
-# Builds the pkgdown site on every push to master and publishes it with GitHub Pages:
+# Builds the pkgdown site on every push to main and publishes it with GitHub Pages:
 #   https://sedzinfo.github.io/snp/
-# Needs Settings > Pages > Build and deployment > Source set to "GitHub Actions".
+# Needs Settings > Pages > Build and deployment > Source set to "GitHub Actions", and main allowed
+# to deploy in Settings > Environments > github-pages > Deployment branches and tags.
 # From the Actions tab, "Run workflow" rebuilds the site without a push.
 name: pkgdown
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
