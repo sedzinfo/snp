@@ -1,0 +1,35 @@
+<div class="row">
+  <main id="main" class="col-md-9">
+{{{index}}}
+  </main>
+
+  <aside class="col-md-3">
+{{#sidebar}}
+{{{.}}}
+{{/sidebar}}
+  </aside>
+</div>
+<!-- Above: pkgdown's own content-home.html. Below: structured data (JSON-LD) for search engines, on the
+     home page only. Check it at https://search.google.com/test/rich-results -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "name": "snp",
+  "alternateName": "Plot standard normal distribution",
+  "description": "Draws the standard normal curve with score scales lined up under it: z, T, cumulative percentage, percentile, sten, stanine, grade and IQ, or scales defined in a data frame, each shown as labelled tick marks or coloured bands, in blues, reds, greens or a diverging palette, each with a light and a dark mode.",
+  "url": "https://sedzinfo.github.io/snp/",
+  "codeRepository": "https://github.com/sedzinfo/snp",
+  "programmingLanguage": "R",
+  "runtimePlatform": "R",
+  "image": "https://sedzinfo.github.io/snp/card.png",
+  "license": "https://www.gnu.org/licenses/gpl-3.0.html",
+  "author": {
+    "@type": "Person",
+    "@id": "https://sedzinfo.github.io/#person",
+    "name": "Dimitrios Zacharatos",
+    "url": "https://sedzinfo.github.io/",
+    "sameAs": ["https://github.com/sedzinfo", "https://orcid.org/0000-0003-1789-8294"]
+  }
+}
+</script>

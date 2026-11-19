@@ -1,0 +1,18 @@
+# How to cite this package. GitHub shows it as "Cite this repository"; Zenodo uses it for the DOI of each release.
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "snp: Plot standard normal distribution"
+abstract: "Draws the standard normal curve with score scales lined up under it: z, T, cumulative percentage, percentile, sten, stanine, grade and IQ, or scales defined in a data frame, each shown as labelled tick marks or coloured bands, in blues, reds, greens or a diverging palette, each with a light and a dark mode."
+authors:
+  - family-names: "Zacharatos"
+    given-names: "Dimitrios"
+    orcid: "https://orcid.org/0000-0003-1789-8294"
+license: GPL-3.0-only
+repository-code: "https://github.com/sedzinfo/snp"
+url: "https://sedzinfo.github.io/snp/"
+keywords:
+  - "data-visualization"
+  - "normal-distribution"
+  - "r-package"
+  - "statistics"
