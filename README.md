@@ -4,9 +4,11 @@ Draws the standard normal curve in R with score scales lined up under it: z, T, 
 
 # Installation Instructions
 ## install R
-installation instructions can be found here: https://cran.r-project.org/  
-## install RStudio IDE (optional but a good idea)  
-installation instructions can be found here: https://posit.co/downloads/  
+installation instructions can be found here: https://cran.r-project.org/
+
+## install RStudio IDE (optional but a good idea)
+
+installation instructions can be found here: https://posit.co/downloads/
 
 open RStudio and type in the console:
 ```
