@@ -1,23 +1,39 @@
 # Standard Normal Plot
 
+[Website](https://sedzinfo.github.io/snp/)
+
 Draws the standard normal curve in R with score scales lined up under it: z, T, cumulative percentage, percentile, sten, stanine, grade and IQ, so that a score on one scale can be read off on the others. Colour shows how common a score is, in blues, reds or greens: the more cases an interval under the curve, or a band of the scales, holds, the darker it is. A diverging palette colours the bands blue below the mean and red above it instead. Each palette has a light and a dark mode.
 
-# Installation Instructions
-## install R
-installation instructions can be found here: https://cran.r-project.org/
+## Installation
 
-## install RStudio IDE (optional but a good idea)
+### Prerequisites
 
-installation instructions can be found here: https://posit.co/downloads/
+1. **Install R**: https://cran.r-project.org/
+2. **Install RStudio** (optional but recommended): https://posit.co/downloads/
 
-open RStudio and type in the console:
+### Package Installation
+
+Open RStudio (or an R console) and run:
+
+```r
+install.packages(
+  "snp",
+  repos = c("https://sedzinfo.r-universe.dev", "https://cloud.r-project.org")
+)
 ```
+
+[R-universe](https://sedzinfo.r-universe.dev/snp) builds snp from this repository, and CRAN provides the packages it needs.
+
+To install from GitHub instead:
+
+```r
+# Install devtools if you haven't already
 install.packages("devtools")
-library(devtools)
-install_github("sedzinfo/snp")
+# Install snp from GitHub
+devtools::install_github("sedzinfo/snp")
 ```
 
-Without devtools, install the source tarball of the [latest release](https://github.com/sedzinfo/snp/releases/tag/latest), which is rebuilt from `main` on every change, together with the PDF manual:
+Or install the source tarball of the [latest release](https://github.com/sedzinfo/snp/releases/tag/latest), which is rebuilt from `main` on every change, together with the PDF manual:
 
 ```r
 install.packages(
@@ -26,7 +42,7 @@ install.packages(
 )
 ```
 
-# Usage
+## Usage
 ```r
 library(snp)
 plot_normal()                                   # for figures about 7 inches wide
@@ -44,11 +60,11 @@ plot_normal(my_scales)
 
 More examples, from palettes and sizes to scales of your own, are in the [Examples](https://sedzinfo.github.io/snp/articles/examples.html) article, and [Saving as vector graphics](https://sedzinfo.github.io/snp/articles/vector-graphics.html) shows how to save the chart as PDF, SVG, EMF or EPS.
 
-# Screenshot
+## Screenshot
 
 <img src="https://raw.githubusercontent.com/sedzinfo/snp/master/screenshots/snp.svg" alt="The standard normal curve with the share of cases in each standard deviation band (34.13%, 13.59%, 2.14%, 0.13%), above aligned scales of z scores, T scores, cumulative percentages, percentiles, stens, stanines, grades and IQ, all in blues, darker where more cases fall">
 
-# Palettes
+## Palettes
 
 `palette` sets the colours, `"blues"` (the default), `"reds"`, `"greens"` or `"diverging"`, and `mode` the background, `"light"` (the default) or `"dark"`:
 
@@ -56,6 +72,7 @@ More examples, from palettes and sizes to scales of your own, are in the [Exampl
 
 ---
 
+[![R-universe](https://sedzinfo.r-universe.dev/snp/badges/version)](https://sedzinfo.r-universe.dev/snp)
 ![Stars](https://img.shields.io/github/stars/sedzinfo/snp)
 ![Watchers](https://img.shields.io/github/watchers/sedzinfo/snp)
 ![Repo Size](https://img.shields.io/github/repo-size/sedzinfo/snp)
@@ -65,4 +82,4 @@ More examples, from palettes and sizes to scales of your own, are in the [Exampl
 ![Contributors](https://img.shields.io/github/contributors/sedzinfo/snp)
 ![License](https://img.shields.io/github/license/sedzinfo/snp)
 ![Workflow Status](https://img.shields.io/github/actions/workflow/status/sedzinfo/snp/build-tarball.yml)
-![R CMD check](https://img.shields.io/github/actions/workflow/status/sedzinfo/snp/R-CMD-check.yaml?label=R%20CMD%20check)
+![R-CMD-check](https://github.com/sedzinfo/snp/actions/workflows/R-CMD-check.yaml/badge.svg)
