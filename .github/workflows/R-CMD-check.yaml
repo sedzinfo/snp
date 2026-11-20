@@ -1,10 +1,10 @@
-# Runs R CMD check, the tests and the vignettes included, on every push to master and on every pull
+# Runs R CMD check, the tests and the vignettes included, on every push to main and on every pull
 # request, on Linux and Windows. From the Actions tab, "Run workflow" runs it without a push.
 name: R-CMD-check
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
