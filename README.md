@@ -1,19 +1,29 @@
 # Standard Normal Plot
 
-[Website](https://sedzinfo.github.io/snp/)
+[Help pages](https://sedzinfo.github.io/snp/reference/)
+
+## What it does
 
 Draws the standard normal curve in R with score scales lined up under it: z, T, cumulative percentage, percentile, sten, stanine, grade and IQ, so that a score on one scale can be read off on the others. Colour shows how common a score is, in blues, reds or greens: the more cases an interval under the curve, or a band of the scales, holds, the darker it is. A diverging palette colours the bands blue below the mean and red above it instead. Each palette has a light and a dark mode.
 
 ## Installation
 
-### Prerequisites
+### 1. Install R
 
-1. **Install R**: https://cran.r-project.org/
-2. **Install RStudio** (optional but recommended): https://posit.co/downloads/
+Download R from [CRAN](https://cran.r-project.org/), for Windows, macOS or Linux, and run the installer.
 
-### Package Installation
+### 2. Install RStudio or Positron
 
-Open RStudio (or an R console) and run:
+An editor makes R easier to use. It is optional, and both are free, from Posit:
+
+- [RStudio Desktop](https://posit.co/download/rstudio-desktop/)
+- [Positron](https://positron.posit.co/download.html), which also runs Python
+
+### 3. Install snp
+
+Run one of these in RStudio, Positron or the R console. Each one also installs the packages snp needs.
+
+#### From R-universe (recommended)
 
 ```r
 install.packages(
@@ -22,27 +32,39 @@ install.packages(
 )
 ```
 
-[R-universe](https://sedzinfo.r-universe.dev/snp) builds snp from this repository, and CRAN provides the packages it needs.
+[R-universe](https://sedzinfo.r-universe.dev/snp) builds snp from this repository after every change, ready to install on Windows, macOS and Linux, and CRAN provides the packages it needs.
 
-To install from GitHub instead:
+#### From GitHub
 
 ```r
-# Install devtools if you haven't already
-install.packages("devtools")
-# Install snp from GitHub
-devtools::install_github("sedzinfo/snp")
+install.packages("pak")   # once
+pak::pak("sedzinfo/snp")
 ```
 
-Or install the source tarball of the [latest release](https://github.com/sedzinfo/snp/releases/tag/latest), which is rebuilt from `main` on every change, together with the PDF manual:
+#### From the release tarball
+
+The [latest release](https://github.com/sedzinfo/snp/releases/tag/latest) has the source tarball and the PDF manual, rebuilt from `main` on every change:
 
 ```r
-install.packages(
-  "https://github.com/sedzinfo/snp/releases/download/latest/snp_0.1.0.tar.gz",
-  repos = NULL, type = "source"
-)
+install.packages("pak")   # once
+pak::pak("url::https://github.com/sedzinfo/snp/releases/download/latest/snp_0.1.0.tar.gz")
+```
+
+#### From a clone of the repository
+
+This repository keeps no files in [Git LFS](https://git-lfs.com), so a plain clone with [Git](https://git-scm.com/downloads) has everything:
+
+```bash
+git clone https://github.com/sedzinfo/snp.git
+```
+
+```r
+install.packages("pak")   # once
+pak::local_install("path/to/snp")
 ```
 
 ## Usage
+
 ```r
 library(snp)
 plot_normal()                                   # for figures about 7 inches wide
@@ -60,7 +82,7 @@ plot_normal(my_scales)
 
 More examples, from palettes and sizes to scales of your own, are in the [Examples](https://sedzinfo.github.io/snp/articles/examples.html) article, and [Saving as vector graphics](https://sedzinfo.github.io/snp/articles/vector-graphics.html) shows how to save the chart as PDF, SVG, EMF or EPS.
 
-## Screenshot
+## Screenshots
 
 <img src="https://raw.githubusercontent.com/sedzinfo/snp/master/screenshots/snp.svg" alt="The standard normal curve with the share of cases in each standard deviation band (34.13%, 13.59%, 2.14%, 0.13%), above aligned scales of z scores, T scores, cumulative percentages, percentiles, stens, stanines, grades and IQ, all in blues, darker where more cases fall">
 
